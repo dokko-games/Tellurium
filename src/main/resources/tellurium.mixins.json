@@ -7,7 +7,6 @@
   },
   "client": [
     "screen.ChatScreenMixin",
-    "entity.render.EntityRenderMixin",
     "screen.InGameHudMixin",
     "screen.KeybindingMixin",
     "input.KeyboardMixin",

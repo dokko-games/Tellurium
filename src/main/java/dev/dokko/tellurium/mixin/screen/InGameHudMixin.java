@@ -1,12 +1,12 @@
 package dev.dokko.tellurium.mixin.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import dev.dokko.tellurium.Tellurium;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderTickCounter;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.ItemCooldownManager;
@@ -94,9 +94,13 @@ public class InGameHudMixin {
             Identifier iconTexture = Identifier.of("minecraft", "textures/item/totem_of_undying.png");
             effects.add(iconTexture);
         }
-        if (Tellurium.getManager().getConfig().isLowDurabilityIndicator()) {
-            for (ItemStack armor : client.player.getArmorItems()) {
-                if (armor.isDamageable() && armor.getMaxDamage() - armor.getDamage() <= 50) {
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (slot.getType() == EquipmentSlot.Type.HUMANOID_ARMOR) {
+                ItemStack armor = client.player.getEquippedStack(slot);
+
+                if (armor.isDamageable() &&
+                        armor.getMaxDamage() - armor.getDamage() <= 50) {
+
                     effects.add(Identifier.of(Tellurium.MOD_ID, "textures/icon/stat/low_armor.png"));
                     break;
                 }
@@ -112,7 +116,7 @@ public class InGameHudMixin {
             Identifier iconTexture = Identifier.of(Tellurium.MOD_ID, "textures/icon/stat/mace_slowfall.png");
             effects.add(iconTexture);
         }
-        if(Tellurium.getManager().getConfig().isElytraIndicator() && client.player.getInventory().getArmorStack(2).isOf(Items.ELYTRA)) {
+        if(Tellurium.getManager().getConfig().isElytraIndicator() && client.player.getEquippedStack(EquipmentSlot.CHEST).isOf(Items.ELYTRA)) {
             Identifier iconTexture = Identifier.of("minecraft", "textures/item/elytra.png");
             effects.add(iconTexture);
         }
@@ -123,7 +127,6 @@ public class InGameHudMixin {
     @Unique
     private void renderEffects(DrawContext context, int screenWidth, int screenHeight) {
         int ICON_SIZE = Tellurium.getManager().getConfig().getIndicatorSize();
-        RenderSystem.enableBlend();
 
         int totalIcons = effects.size();
 
@@ -141,11 +144,10 @@ public class InGameHudMixin {
             int iconY = screenHeight / 2 + Tellurium.getManager().getConfig().getIndicatorOffset() + row * (ICON_SIZE + ROW_DISTANCE);
             context.drawTexture(RenderLayer::getGuiTextured, iconTexture, iconX, iconY, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
         }
-
-        RenderSystem.disableBlend();
     }
+    @Unique
     private boolean hasTotemInInventory(PlayerEntity player) {
-        for (ItemStack stack : player.getInventory().main) {
+        for (ItemStack stack : player.getInventory().getMainStacks()) {
             if (stack.getItem() == Items.TOTEM_OF_UNDYING && !stack.isEmpty()) {
                 return true;
             }

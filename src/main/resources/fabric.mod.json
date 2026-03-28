@@ -7,7 +7,7 @@
 	"authors": [
 		"qDokko"
 	],
-	"license": "CC0-1.0",
+	"license": "LGPL-3.0",
 	"icon": "assets/tellurium/icon.png",
 	"environment": "client",
 	"entrypoints": {
@@ -23,9 +23,9 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.18.5",
-		"minecraft": "=1.21.4",
+		"minecraft": "=1.21.5",
 		"java": ">=21",
 		"fabric-api": "*",
-		"ukulib": ">=1.6.0"
+		"ukulib": ">=1.7.0"
 	}
 }
