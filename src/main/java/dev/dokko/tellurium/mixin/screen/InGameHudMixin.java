@@ -50,8 +50,10 @@ public class InGameHudMixin {
 
     @Unique
     private void renderIndicators(DrawContext context, ItemStack mainHand, MinecraftClient client, ItemStack offHand, int screenWidth, int screenHeight) {
-        boolean holdingMace = mainHand.isOf(Items.MACE);
-        boolean hasSlowFalling = client.player.hasStatusEffect(StatusEffects.SLOW_FALLING);
+        if (Tellurium.getManager().getConfig().isLowHealthIndicator() && client.player.getHealth() <= 6){
+            Identifier iconTexture = Identifier.of(Tellurium.MOD_ID, "textures/icon/stat/low_health.png");
+            effects.add(iconTexture);
+        }
         boolean holdingShield = false;
         boolean stunned = false;
         ItemCooldownManager cooldownManager = client.player.getItemCooldownManager();
@@ -61,18 +63,6 @@ public class InGameHudMixin {
         }
         if(Tellurium.getManager().getConfig().isShieldStunIndicator() &&holdingShield && stunned) {
             Identifier iconTexture = Identifier.of(Tellurium.MOD_ID, "textures/icon/stat/shield_stun.png");
-            effects.add(iconTexture);
-        }
-        if(Tellurium.getManager().getConfig().isBurningIndicator() && client.player.isOnFire()) {
-            Identifier iconTexture = Identifier.of(Tellurium.MOD_ID, "textures/icon/stat/burning.png");
-            effects.add(iconTexture);
-        }
-        if (holdingMace && hasSlowFalling && Tellurium.getManager().getConfig().isMaceSlowFallIndicator()) {
-            Identifier iconTexture = Identifier.of(Tellurium.MOD_ID, "textures/icon/stat/mace_slowfall.png");
-            effects.add(iconTexture);
-        }
-        if (Tellurium.getManager().getConfig().isLowHealthIndicator() && client.player.getHealth() <= 6){
-            Identifier iconTexture = Identifier.of(Tellurium.MOD_ID, "textures/icon/stat/low_health.png");
             effects.add(iconTexture);
         }
         boolean hasStrength = client.player.hasStatusEffect(StatusEffects.STRENGTH);
@@ -94,12 +84,8 @@ public class InGameHudMixin {
                 effects.add(iconTexture);
             }
         }
-        if(Tellurium.getManager().getConfig().isElytraIndicator() && client.player.getInventory().getArmorStack(2).isOf(Items.ELYTRA)) {
-            Identifier iconTexture = Identifier.of("minecraft", "textures/item/elytra.png");
-            effects.add(iconTexture);
-        }
         if (Tellurium.getManager().getConfig().isTotemIndicator() && !offHand.isOf(Items.TOTEM_OF_UNDYING)
-        && hasTotemInInventory(client.player)) {
+                && hasTotemInInventory(client.player)) {
             Identifier iconTexture = Identifier.of("minecraft", "textures/item/totem_of_undying.png");
             effects.add(iconTexture);
         }
@@ -110,6 +96,20 @@ public class InGameHudMixin {
                     break;
                 }
             }
+        }
+        if(Tellurium.getManager().getConfig().isBurningIndicator() && client.player.isOnFire()) {
+            Identifier iconTexture = Identifier.of(Tellurium.MOD_ID, "textures/icon/stat/burning.png");
+            effects.add(iconTexture);
+        }
+        boolean holdingMace = mainHand.isOf(Items.MACE);
+        boolean hasSlowFalling = client.player.hasStatusEffect(StatusEffects.SLOW_FALLING);
+        if (holdingMace && hasSlowFalling && Tellurium.getManager().getConfig().isMaceSlowFallIndicator()) {
+            Identifier iconTexture = Identifier.of(Tellurium.MOD_ID, "textures/icon/stat/mace_slowfall.png");
+            effects.add(iconTexture);
+        }
+        if(Tellurium.getManager().getConfig().isElytraIndicator() && client.player.getInventory().getArmorStack(2).isOf(Items.ELYTRA)) {
+            Identifier iconTexture = Identifier.of("minecraft", "textures/item/elytra.png");
+            effects.add(iconTexture);
         }
 
         renderEffects(context, screenWidth, screenHeight);
