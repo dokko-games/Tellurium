@@ -5,6 +5,7 @@ import dev.dokko.tellurium.Tellurium;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -57,9 +58,13 @@ public class InGameHudMixin {
         boolean holdingShield = false;
         boolean stunned = false;
         ItemCooldownManager cooldownManager = client.player.getItemCooldownManager();
-        if(mainHand.isOf(Items.SHIELD) || offHand.isOf(Items.SHIELD)){
+        if(mainHand.isOf(Items.SHIELD)){
             holdingShield = true;
-            stunned = cooldownManager.isCoolingDown(Items.SHIELD);
+            stunned = cooldownManager.isCoolingDown(mainHand);
+        }
+        else if(offHand.isOf(Items.SHIELD)){
+            holdingShield = true;
+            stunned = cooldownManager.isCoolingDown(offHand);
         }
         if(Tellurium.getManager().getConfig().isShieldStunIndicator() &&holdingShield && stunned) {
             Identifier iconTexture = Identifier.of(Tellurium.MOD_ID, "textures/icon/stat/shield_stun.png");
@@ -134,7 +139,7 @@ public class InGameHudMixin {
 
             int iconX = startX + col * (ICON_SIZE + ICON_DISTANCE);
             int iconY = screenHeight / 2 + Tellurium.getManager().getConfig().getIndicatorOffset() + row * (ICON_SIZE + ROW_DISTANCE);
-            context.drawTexture(iconTexture, iconX, iconY, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
+            context.drawTexture(RenderLayer::getGuiTextured, iconTexture, iconX, iconY, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
         }
 
         RenderSystem.disableBlend();

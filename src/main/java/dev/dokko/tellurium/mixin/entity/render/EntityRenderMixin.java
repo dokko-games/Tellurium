@@ -4,10 +4,7 @@ import dev.dokko.tellurium.Tellurium;
 import dev.dokko.tellurium.config.HitboxConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.Frustum;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.render.*;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
@@ -23,65 +20,82 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(EntityRenderer.class)
-public class EntityRenderMixin<T extends Entity> {
-    @Inject(method = "render", at = @At("HEAD"))
-    private void onRenderEntity(T entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        renderHitboxes(entity, matrices, vertexConsumers);
-    }
-    @Inject(method = "shouldRender", at = @At("HEAD"), cancellable = true)
-    public void onShouldRenderCall(T entity, Frustum frustum, double x, double y, double z, CallbackInfoReturnable<Boolean> cir){
-        if(!Tellurium.getManager().getConfig().isRemoveDeathAnimation())return;
-        if(!entity.isAlive()){
-            cir.setReturnValue(false);
-        }
+@Mixin(WorldRenderer.class)
+public class EntityRenderMixin {
+
+    @Inject(
+            method = "renderEntity",
+            at = @At("TAIL")
+    )
+    private void onRenderEntity(
+            Entity entity,
+            double cx, double cy, double cz,
+            float tickDelta,
+            MatrixStack matrices,
+            VertexConsumerProvider vertexConsumers,
+            CallbackInfo ci
+    ) {
+        matrices.push();
+
+        renderHitboxes(entity, matrices, vertexConsumers, cx, cy, cz);
+
+        matrices.pop();
     }
 
-    @Unique
-    private static <T extends Entity> void renderHitboxes(T entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
-        if (drawSpeedHitbox(entity, matrices, vertexConsumers)) return;
-        drawCrawlHitbox(entity, matrices, vertexConsumers);
-        drawEndCrystalElytraHitbox(entity, matrices, vertexConsumers);
+    private static void renderHitboxes(Entity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, double cx, double cy, double cz) {
+        if (drawSpeedHitbox(entity, matrices, vertexConsumers, cx, cy, cz)) return;
+        drawCrawlHitbox(entity, matrices, vertexConsumers, cx, cy, cz);
+        drawEndCrystalElytraHitbox(entity, matrices, vertexConsumers, cx, cy, cz);
     }
 
-    @Unique
-    private static <T extends Entity> void drawEndCrystalElytraHitbox(T entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
-        if(entity instanceof EndCrystalEntity){
-            if(Tellurium.getManager().getConfig().isElytraCrystalHitbox()){
+    private static void drawEndCrystalElytraHitbox(Entity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, double cx, double cy, double cz) {
+        if (entity instanceof EndCrystalEntity) {
+            if (Tellurium.getManager().getConfig().isElytraCrystalHitbox()) {
                 ClientPlayerEntity player = MinecraftClient.getInstance().player;
-                if (player.getInventory().getArmorStack(2).isOf(Items.ELYTRA)) {
-                    drawBox(entity, matrices, vertexConsumers);
+                if (player != null && player.getInventory().getArmorStack(2).isOf(Items.ELYTRA)) {
+                    drawBox(entity, matrices, vertexConsumers, cx, cy, cz);
                 }
             }
         }
     }
 
-    @Unique
-    private static <T extends Entity> void drawCrawlHitbox(T entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
+    private static void drawCrawlHitbox(Entity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, double cx, double cy, double cz) {
         if (entity instanceof PlayerEntity player) {
-            if(Tellurium.getManager().getConfig().isCrawlHitbox()){
-                if (player.isSwimming() || player.isFallFlying() || player.isCrawling()) {
-                    drawBox(entity, matrices, vertexConsumers);
+            if (Tellurium.getManager().getConfig().isCrawlHitbox()) {
+                if (player.isSwimming() || player.isGliding() || player.isCrawling()) {
+                    drawBox(entity, matrices, vertexConsumers, cx, cy, cz);
                 }
             }
-
         }
     }
 
-    @Unique
-    private static <T extends Entity> boolean drawSpeedHitbox(T entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
-        if(Tellurium.getManager().getConfig().isSpeedHitbox() && entity instanceof LivingEntity){
-            if(MinecraftClient.getInstance().player.getVelocity().length() > Tellurium.getManager().getConfig().getSpeedHitboxThreshold()){
-                drawBox(entity, matrices, vertexConsumers);
+    private static boolean drawSpeedHitbox(Entity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, double cx, double cy, double cz) {
+        if (Tellurium.getManager().getConfig().isSpeedHitbox() && entity instanceof LivingEntity) {
+            ClientPlayerEntity player = MinecraftClient.getInstance().player;
+            if (player != null && player.getVelocity().length() >
+                    Tellurium.getManager().getConfig().getSpeedHitboxThreshold()) {
+
+                drawBox(entity, matrices, vertexConsumers, cx, cy, cz);
                 return true;
             }
         }
         return false;
     }
 
-    private static <T extends Entity> void drawBox(T entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
-        if(HitboxConfig.renderCustomHitbox(entity))return;
-        Box box = entity.getBoundingBox().offset(-entity.getX(), -entity.getY(), -entity.getZ());
-        WorldRenderer.drawBox(matrices, vertexConsumers.getBuffer(RenderLayer.LINES), box, 1.0F, 1.0F, 1.0F, 1.0F);
+    private static void drawBox(Entity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, double cx, double cy, double cz) {
+        if (HitboxConfig.renderCustomHitbox(entity)) return;
+
+        Box box = entity.getBoundingBox().offset(
+                -cx,
+                -cy,
+                -cz
+        );
+
+        VertexRendering.drawBox(
+                matrices,
+                vertexConsumers.getBuffer(RenderLayer.LINES),
+                box,
+                1.0F, 1.0F, 1.0F, 1.0F
+        );
     }
 }
