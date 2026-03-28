@@ -17,7 +17,6 @@ public class HitboxesScreen extends AbstractConfigScreen<Config> {
     @Override
     protected WidgetCreator[] getWidgets(Config config) {
         return new WidgetCreator[] {
-                //TODO: toggle hitboxes in another screen
                 makeBoolean("disableEyeLine", config.isDisableEyeLine(), config::setDisableEyeLine),
                 makeBoolean("disableLookVector", config.isDisableLookVector(), config::setDisableLookVector),
                 new ScreenOpenButton(Tellurium.MOD_ID+".hitboxes.conditional", ConditionalHitboxesScreen::new),

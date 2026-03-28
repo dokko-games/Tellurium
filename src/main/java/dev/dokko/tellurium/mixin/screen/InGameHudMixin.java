@@ -2,9 +2,9 @@ package dev.dokko.tellurium.mixin.screen;
 
 import dev.dokko.tellurium.Tellurium;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -142,7 +142,7 @@ public class InGameHudMixin {
 
             int iconX = startX + col * (ICON_SIZE + ICON_DISTANCE);
             int iconY = screenHeight / 2 + Tellurium.getManager().getConfig().getIndicatorOffset() + row * (ICON_SIZE + ROW_DISTANCE);
-            context.drawTexture(RenderLayer::getGuiTextured, iconTexture, iconX, iconY, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
+            context.drawTexture(RenderPipelines.GUI_TEXTURED, iconTexture, iconX, iconY, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
         }
     }
     @Unique
