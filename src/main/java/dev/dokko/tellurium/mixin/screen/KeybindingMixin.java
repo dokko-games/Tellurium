@@ -12,13 +12,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(KeyBinding.class)
 public abstract class KeybindingMixin {
-    @Shadow public abstract String getTranslationKey();
+
+    @Shadow public abstract String getBoundKeyTranslationKey();
 
     @Inject(at = @At("HEAD"), method = "isPressed", cancellable = true)
     private void injectIsPressed(CallbackInfoReturnable<Boolean> ci){
         if(!Tellurium.getManager().getConfig().isGuiSneak())return;
         if(MinecraftClient.getInstance().currentScreen == null)return;
-        if(getTranslationKey().equals(MinecraftClient.getInstance().options.sneakKey.getTranslationKey())){
+        if(getBoundKeyTranslationKey().equals(MinecraftClient.getInstance().options.sneakKey.getBoundKeyTranslationKey())){
             if(Flags.GUI_SNEAK_FLAG_SNEAKING){
                 ci.setReturnValue(true);
             }

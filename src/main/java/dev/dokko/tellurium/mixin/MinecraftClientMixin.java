@@ -4,9 +4,11 @@ import dev.dokko.tellurium.Tellurium;
 import dev.dokko.tellurium.Flags;
 import dev.dokko.tellurium.config.HitboxConfig;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.hud.debug.DebugHudEntries;
+import net.minecraft.client.gui.hud.debug.DebugHudEntryVisibility;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.GameOptions;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.render.entity.EntityRenderManager;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.Window;
 import org.spongepowered.asm.mixin.Final;
@@ -25,15 +27,15 @@ public abstract class MinecraftClientMixin {
     @Inject(method ="setScreen", at = @At("HEAD"))
     private void openScreen(Screen screen, CallbackInfo ci){
         if (Tellurium.getManager().getConfig().isGuiSneak() && screen != null) {
-            Flags.GUI_SNEAK_FLAG_SNEAKING = InputUtil.isKeyPressed(getWindow().getHandle(), options.sneakKey.getDefaultKey().getCode());
+            Flags.GUI_SNEAK_FLAG_SNEAKING = InputUtil.isKeyPressed(getWindow(), options.sneakKey.getDefaultKey().getCode());
         }
     }
     @Inject(method = "run", at = @At("HEAD"))
     private void applyHitboxState(CallbackInfo ci) {
-        MinecraftClient client = (MinecraftClient)(Object)this;
-        EntityRenderDispatcher dispatcher = client.getEntityRenderDispatcher();
-
-        dispatcher.setRenderHitboxes(HitboxConfig.isRenderHitboxes());
-        Tellurium.LOGGER.info("Stored Hitbox State: {}", dispatcher.shouldRenderHitboxes());
+        HitboxConfig.setRenderHitboxes(Tellurium.getManager().getConfig().isRenderHitboxes());
+        MinecraftClient.getInstance()
+                .debugHudEntryList
+                .setEntryVisibility(DebugHudEntries.ENTITY_HITBOXES, HitboxConfig.isRenderHitboxes() ? DebugHudEntryVisibility.ALWAYS_ON : DebugHudEntryVisibility.NEVER);
+        Tellurium.LOGGER.info("Hitbox state applied: {}", HitboxConfig.isRenderHitboxes());
     }
 }

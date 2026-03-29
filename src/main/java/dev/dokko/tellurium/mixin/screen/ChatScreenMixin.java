@@ -5,6 +5,7 @@ import dev.dokko.tellurium.Tellurium;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -63,8 +64,8 @@ public class ChatScreenMixin {
         if(!Flags.STORE_CHAT_RESET) Flags.STORE_CHAT_LAST_MESSAGE = chatField.getText();
     }
     @Inject(method = "keyPressed", at=@At("HEAD"))
-    private void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir){
-        if(keyCode == GLFW.GLFW_KEY_BACKSPACE && !Flags.GUI_SNEAK_FLAG_TYPED && !Flags.STORE_CHAT_LAST_MESSAGE.isEmpty()){
+    private void keyPressed(KeyInput input, CallbackInfoReturnable<Boolean> cir){
+        if(input.key() == GLFW.GLFW_KEY_BACKSPACE && !Flags.GUI_SNEAK_FLAG_TYPED && !Flags.STORE_CHAT_LAST_MESSAGE.isEmpty()){
             chatField.setText("");
         }
         Flags.GUI_SNEAK_FLAG_TYPED = true;

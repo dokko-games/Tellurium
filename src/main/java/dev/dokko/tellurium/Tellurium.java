@@ -25,6 +25,7 @@ public class Tellurium implements ClientModInitializer {
 	public void onInitializeClient() {
 		ClientTickEvents.END_CLIENT_TICK.register(this::runInvertSprint);
 
+
 		LOGGER.info("Loaded {}", MOD_NAME);
 	}
 	private void runInvertSprint(MinecraftClient client) {
@@ -37,7 +38,7 @@ public class Tellurium implements ClientModInitializer {
 		int keyCode = sprintKey.getDefaultKey().getCode();
 
 		// Check physical key state via GLFW
-		boolean physicallyPressed = InputUtil.isKeyPressed(client.getWindow().getHandle(), keyCode);
+		boolean physicallyPressed = InputUtil.isKeyPressed(client.getWindow(), keyCode);
 
 		// Invert it
 		sprintKey.setPressed(!physicallyPressed);

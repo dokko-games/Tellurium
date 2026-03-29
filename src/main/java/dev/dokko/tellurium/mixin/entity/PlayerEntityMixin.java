@@ -26,7 +26,7 @@ public class PlayerEntityMixin {
     private void perfectReachLogic(Entity target) {
         if(!Tellurium.getManager().getConfig().isPerfectReachSound()) return;
         PlayerEntity player = (PlayerEntity)(Object)this;
-        World world = player.getWorld();
+        World world = player.getEntityWorld();
 
         // +.02 for calculation errors
         float error = .12f;
