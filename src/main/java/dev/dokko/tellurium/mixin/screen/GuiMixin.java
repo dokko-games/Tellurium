@@ -33,7 +33,7 @@ public class GuiMixin {
     @Unique
     private static final ArrayList<Identifier> effects = new ArrayList<>();
     @Inject(method = "extractRenderState", at = @At("TAIL"))
-    private void renderIndicators(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    private void renderIndicators(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker, CallbackInfo ci) {
         effects.clear();
 
         Minecraft client = Minecraft.getInstance();
@@ -46,7 +46,7 @@ public class GuiMixin {
         ItemStack mainHand = client.player.getMainHandItem();
         ItemStack offHand = client.player.getOffhandItem();
 
-        renderIndicators(guiGraphics, mainHand, client, offHand, screenWidth, screenHeight);
+        renderIndicators(graphics, mainHand, client, offHand, screenWidth, screenHeight);
     }
 
     @Unique

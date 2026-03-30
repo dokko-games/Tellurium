@@ -13,14 +13,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityRenderer.class)
-public abstract class EntityRendererMixin<T extends Entity, S extends EntityRenderState> {
+public abstract class EntityRendererMixin<T extends Entity> {
     @Inject(method = "shouldRender", at = @At("HEAD"), cancellable = true)
-    public void injectShouldRender(T entity, Frustum frustum, double x, double y, double z, CallbackInfoReturnable<Boolean> cir){
+    public void injectShouldRender(T entity, Frustum culler, double camX, double camY, double camZ, CallbackInfoReturnable<Boolean> cir){
         if(!entity.isAlive() && Tellurium.getManager().getConfig().isRemoveDeathAnimation())cir.setReturnValue(false);
     }
 
     @Inject(method = "extractRenderState", at = @At("HEAD"))
-    private void onUpdateRenderState(Entity entity, EntityRenderState state, float tickProgress, CallbackInfo ci) {
+    private void onUpdateRenderState(Entity entity, EntityRenderState state, float partialTicks, CallbackInfo ci) {
         ((EntityRenderStateAccessor) state).setEntityOverride_combat_hitboxes(entity);
     }
 }

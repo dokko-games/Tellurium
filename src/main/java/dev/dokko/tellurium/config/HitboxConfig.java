@@ -1,6 +1,7 @@
 package dev.dokko.tellurium.config;
 
 import dev.dokko.tellurium.Tellurium;
+import lombok.Getter;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Monster;
@@ -9,6 +10,7 @@ import net.minecraft.world.entity.player.Player;
 
 public class HitboxConfig {
     // runtime toggle for custom hitboxes
+    @Getter
     private static boolean renderHitboxes = false;
 
     // Returns true if the entity's hitbox is normally rendered. Negated for conditional hitboxes
@@ -26,10 +28,6 @@ public class HitboxConfig {
                 !config.isHideHitboxesForNeutralMobs();
     }
 
-    public static boolean isRenderHitboxes() {
-        return renderHitboxes;
-    }
-
     public static void setRenderHitboxes(boolean render) {
         renderHitboxes = render;
         Tellurium.getManager().getConfig().setRenderHitboxes(render);
@@ -42,14 +40,6 @@ public class HitboxConfig {
         if (entity instanceof Monster) return new float[]{config.getHostileR(), config.getHostileG(), config.getHostileB(), config.getHostileA()};
         if (entity instanceof AgeableMob) return new float[]{config.getPassiveR(), config.getPassiveG(), config.getPassiveB(), config.getPassiveA()};
         return new float[]{config.getNeutralR(), config.getNeutralG(), config.getNeutralB(), config.getNeutralA()};
-    }
-
-    public static boolean isDisableEyeLine() {
-        return Tellurium.getManager().getConfig().isDisableEyeLine();
-    }
-
-    public static boolean isDisableLookVector() {
-        return Tellurium.getManager().getConfig().isDisableLookVector();
     }
 
 }

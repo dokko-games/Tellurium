@@ -29,8 +29,8 @@ import java.awt.*;
 public abstract class EntityHitboxDebugRendererMixin {
 
     @Inject(method = "showHitboxes", at = @At("HEAD"), cancellable = true)
-    private void onDrawHitbox(Entity entity, float tickProgress, boolean inLocalServer, CallbackInfo ci) {
-        if (inLocalServer) {// they want to debug, let them
+    private void onDrawHitbox(Entity entity, float partialTicks, boolean isServerEntity, CallbackInfo ci) {
+        if (isServerEntity) {// they want to debug, let them
             return;
         }
         Config config = Tellurium.getManager().getConfig();
@@ -48,7 +48,7 @@ public abstract class EntityHitboxDebugRendererMixin {
         }
         if(!render)return;
 
-        render_1_21_11_boxes(mc, config.getHitboxThickness(), entity, tickProgress,
+        render_1_21_11_boxes(mc, config.getHitboxThickness(), entity, partialTicks,
                 new Color(255, 0, 0, 255),
                 new Color(0, 0, 255, 255),
                 new Color(col[0], col[1], col[2], col[3]),

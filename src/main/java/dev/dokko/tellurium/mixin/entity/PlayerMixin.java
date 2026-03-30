@@ -17,8 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Player.class)
 public class PlayerMixin {
     @Inject(method = "attack", at = @At("HEAD"))
-    private void onAttack(Entity target, CallbackInfo ci) {
-        perfectReachLogic(target);
+    private void onAttack(Entity entity, CallbackInfo ci) {
+        perfectReachLogic(entity);
     }
 
     @Unique
@@ -36,9 +36,9 @@ public class PlayerMixin {
 
         AABB box = target.getBoundingBox();
 
-        double closestX = Math.max(box.minX, Math.min(eyePos.x, box.maxX));
-        double closestY = Math.max(box.minY, Math.min(eyePos.y, box.maxY));
-        double closestZ = Math.max(box.minZ, Math.min(eyePos.z, box.maxZ));
+        double closestX = Math.clamp(eyePos.x, box.minX, box.maxX);
+        double closestY = Math.clamp(eyePos.y, box.minY, box.maxY);
+        double closestZ = Math.clamp(eyePos.z, box.minZ, box.maxZ);
 
         Vec3 closestPoint = new Vec3(closestX, closestY, closestZ);
         double distance = eyePos.distanceTo(closestPoint);
