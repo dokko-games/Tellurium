@@ -65,6 +65,7 @@
   "tellurium.gui.screenshots": "Screenshots...",
   "tellurium.hitboxes": "Hitbox Settings",
   "tellurium.feature.hitbox.thickness": "Thickness",
+  "tellurium.feature.hitbox.thickness.tooltip": "How thick hitbox lines look",
   "tellurium.hitboxes.color": "Visuals",
   "tellurium.hitboxes.color.passive": "Passive",
   "tellurium.hitboxes.color.neutral": "Neutral",
