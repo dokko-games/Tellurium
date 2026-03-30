@@ -2,7 +2,7 @@ package dev.dokko.tellurium.mixin.screen;
 
 import dev.dokko.tellurium.util.Utils;
 import lombok.extern.slf4j.Slf4j;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
@@ -59,8 +59,8 @@ public class OptionsScreenMixin extends Screen {
     }
 
     @Override
-    public void render(@NonNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
-        super.render(graphics, mouseX, mouseY, a);
+    public void extractRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractRenderState(graphics, mouseX, mouseY, a);
 
         if (this.ssButton != null) {
             graphics.blit(RenderPipelines.GUI_TEXTURED, DEFAULT_ICON, this.ssButton.getX() + 2, this.ssButton.getY() + 2, 0, 0, 16, 16, 16, 16);

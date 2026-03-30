@@ -4,7 +4,7 @@ import dev.dokko.tellurium.Tellurium;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -32,8 +32,8 @@ public class InGameHudMixin {
     private static final int ROW_DISTANCE = 2;
     @Unique
     private static final ArrayList<Identifier> effects = new ArrayList<>();
-    @Inject(method = "render", at = @At("TAIL"))
-    private void renderIndicators(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    @Inject(method = "extractRenderState", at = @At("TAIL"))
+    private void renderIndicators(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
         effects.clear();
 
         Minecraft client = Minecraft.getInstance();
@@ -50,7 +50,7 @@ public class InGameHudMixin {
     }
 
     @Unique
-    private void renderIndicators(GuiGraphics guiGraphics, ItemStack mainHand, Minecraft client, ItemStack offHand, int screenWidth, int screenHeight) {
+    private void renderIndicators(GuiGraphicsExtractor guiGraphics, ItemStack mainHand, Minecraft client, ItemStack offHand, int screenWidth, int screenHeight) {
         if (Tellurium.getManager().getConfig().isLowHealthIndicator() && client.player.getHealth() <= 6){
             Identifier iconTexture = Identifier.fromNamespaceAndPath(Tellurium.MOD_ID, "textures/icon/stat/low_health.png");
             effects.add(iconTexture);
@@ -125,7 +125,7 @@ public class InGameHudMixin {
     }
 
     @Unique
-    private void renderEffects(GuiGraphics guiGraphics, int screenWidth, int screenHeight) {
+    private void renderEffects(GuiGraphicsExtractor guiGraphics, int screenWidth, int screenHeight) {
         int ICON_SIZE = Tellurium.getManager().getConfig().getIndicatorSize();
 
         int totalIcons = effects.size();

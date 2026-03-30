@@ -31,7 +31,7 @@ public class ChatScreenMixin {
     protected EditBox input;
 
     @Redirect(
-            method = "render",
+            method = "extractRenderState",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/Options;getBackgroundColor(I)I"
