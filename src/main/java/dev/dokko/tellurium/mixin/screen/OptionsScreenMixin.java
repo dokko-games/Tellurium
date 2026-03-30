@@ -1,48 +1,73 @@
 package dev.dokko.tellurium.mixin.screen;
 
-import dev.dokko.tellurium.Tellurium;
 import dev.dokko.tellurium.util.Utils;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.option.OptionsScreen;
-import net.minecraft.client.gui.tooltip.Tooltip;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import lombok.extern.slf4j.Slf4j;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.options.OptionsScreen;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Util;
-import net.uku3lig.ukulib.utils.IconButton;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-
+@Slf4j
 @Mixin(OptionsScreen.class)
 public class OptionsScreenMixin extends Screen {
     @Unique
-    private static final Identifier STATS_ICON = Identifier.of(Tellurium.MOD_ID, "textures/icon/screenshots.png");
-
-    protected OptionsScreenMixin(Text title) {
-        super(title);
-    }
-
-    @Inject(at = @At("RETURN"), method = "init")
-    private void init(CallbackInfo ci) {
-        ButtonWidget rp = this.children().stream()
-                .filter(c -> c instanceof ButtonWidget b && b.getMessage().equals(Text.translatable("options.resourcepack")))
-                .map(ButtonWidget.class::cast)
-                .findFirst()
-                .orElseGet(() -> ButtonWidget.builder(Text.empty(), b -> {}).build()); // should never happen
-        ButtonWidget button = new IconButton(rp.getX() - 2 - 20, rp.getY(), 20, 20,
-                STATS_ICON, 16, 16,
-                a -> openScreenshotsFolder());
-        button.setTooltip(Tooltip.of(Text.translatable(Tellurium.MOD_ID+".gui.screenshots")));
-        this.addDrawableChild(button);
-    }
+    private static final Identifier DEFAULT_ICON = Identifier.fromNamespaceAndPath("tellurium", "/textures/icon/screenshots.png");
 
     @Unique
-    private void openScreenshotsFolder() {
-        Util.getOperatingSystem().open(Utils.getScreenshotsPath(client));
+    private Button ssButton = null;
+
+    @Unique
+    private Button rpButton = null;
+
+    @Inject(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/options/OptionsScreen;repositionElements()V"))
+    public void addSSButton(CallbackInfo ci) {
+
+        this.rpButton = this.children().stream()
+                .filter(c -> c instanceof Button b && b.getMessage().equals(Component.translatable("options.resourcepack")))
+                .map(Button.class::cast)
+                .findFirst()
+                .orElse(null);
+
+        if (this.rpButton == null) {
+            log.error("Could not find the resource packs button to align the screenshots button!");
+        }
+
+        this.ssButton = this.addRenderableWidget(
+                new Button.Builder(Component.empty(), ignored -> Util.getPlatform().openFile(Utils.getScreenshotsPath(minecraft)))
+                        .size(20, 20)
+                        .tooltip(Tooltip.create(Component.literal("Screenshots")))
+                        .build()
+        );
     }
 
+    @Inject(method = "repositionElements", at = @At("RETURN"))
+    public void refreshWidgetPositions(CallbackInfo ci) {
+        if (this.ssButton != null && this.rpButton != null) {
+            this.ssButton.setPosition(this.rpButton.getX() - 24, this.rpButton.getY());
+        }
+    }
+
+    @Override
+    public void render(@NonNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
+        super.render(graphics, mouseX, mouseY, a);
+
+        if (this.ssButton != null) {
+            graphics.blit(RenderPipelines.GUI_TEXTURED, DEFAULT_ICON, this.ssButton.getX() + 2, this.ssButton.getY() + 2, 0, 0, 16, 16, 16, 16);
+        }
+    }
+
+    protected OptionsScreenMixin(Component title) {
+        super(title);
+    }
 }

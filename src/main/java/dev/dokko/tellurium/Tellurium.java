@@ -1,13 +1,13 @@
 package dev.dokko.tellurium;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.dokko.tellurium.config.Config;
 import lombok.Getter;
 import net.fabricmc.api.ClientModInitializer;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
 import net.uku3lig.ukulib.config.ConfigManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,20 +28,20 @@ public class Tellurium implements ClientModInitializer {
 
 		LOGGER.info("Loaded {}", MOD_NAME);
 	}
-	private void runInvertSprint(MinecraftClient client) {
+	private void runInvertSprint(Minecraft client) {
 		if(!manager.getConfig().isInvertSprint())return;
 		if (client.player == null || client.options == null) return;
 
-		KeyBinding sprintKey = client.options.sprintKey;
+		KeyMapping sprintKey = client.options.keySprint;
 
 		// Get the keycode of the sprint key
-		int keyCode = sprintKey.getDefaultKey().getCode();
+		int keyCode = sprintKey.getDefaultKey().getValue();
 
 		// Check physical key state via GLFW
-		boolean physicallyPressed = InputUtil.isKeyPressed(client.getWindow(), keyCode);
+		boolean physicallyPressed = InputConstants.isKeyDown(client.getWindow(), keyCode);
 
 		// Invert it
-		sprintKey.setPressed(!physicallyPressed);
+		sprintKey.setDown(!physicallyPressed);
 	}
 
 }

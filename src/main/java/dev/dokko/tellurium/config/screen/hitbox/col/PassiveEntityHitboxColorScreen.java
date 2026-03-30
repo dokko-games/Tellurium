@@ -1,8 +1,8 @@
-package dev.dokko.tellurium.config.screen.hitbox;
+package dev.dokko.tellurium.config.screen.hitbox.col;
 
 import dev.dokko.tellurium.Tellurium;
 import dev.dokko.tellurium.config.Config;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 import net.uku3lig.ukulib.config.option.WidgetCreator;
 import net.uku3lig.ukulib.config.screen.AbstractConfigScreen;
 

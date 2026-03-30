@@ -1,10 +1,10 @@
 package dev.dokko.tellurium.config;
 
 import dev.dokko.tellurium.Tellurium;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 
 
 public class HitboxConfig {
@@ -17,12 +17,12 @@ public class HitboxConfig {
 
         var config = Tellurium.getManager().getConfig();
 
-        if (entity instanceof PassiveEntity && config.isHideHitboxesForPassiveMobs()) return false;
-        if (entity instanceof HostileEntity && config.isHideHitboxesForHostileMobs()) return false;
-        if (entity instanceof PlayerEntity && config.isHideHitboxesForPlayers()) return false;
-        return entity instanceof PassiveEntity ||
-                entity instanceof HostileEntity ||
-                entity instanceof PlayerEntity ||
+        if (entity instanceof AgeableMob && config.isHideHitboxesForPassiveMobs()) return false;
+        if (entity instanceof Monster && config.isHideHitboxesForHostileMobs()) return false;
+        if (entity instanceof Player && config.isHideHitboxesForPlayers()) return false;
+        return entity instanceof AgeableMob ||
+                entity instanceof Monster ||
+                entity instanceof Player ||
                 !config.isHideHitboxesForNeutralMobs();
     }
 
@@ -38,9 +38,9 @@ public class HitboxConfig {
 
     public static float[] getColor(Entity entity) {
         var config = Tellurium.getManager().getConfig();
-        if (entity instanceof PlayerEntity) return new float[]{config.getPlayerR(), config.getPlayerG(), config.getPlayerB(), config.getPlayerA()};
-        if (entity instanceof HostileEntity) return new float[]{config.getHostileR(), config.getHostileG(), config.getHostileB(), config.getHostileA()};
-        if (entity instanceof PassiveEntity) return new float[]{config.getPassiveR(), config.getPassiveG(), config.getPassiveB(), config.getPassiveA()};
+        if (entity instanceof Player) return new float[]{config.getPlayerR(), config.getPlayerG(), config.getPlayerB(), config.getPlayerA()};
+        if (entity instanceof Monster) return new float[]{config.getHostileR(), config.getHostileG(), config.getHostileB(), config.getHostileA()};
+        if (entity instanceof AgeableMob) return new float[]{config.getPassiveR(), config.getPassiveG(), config.getPassiveB(), config.getPassiveA()};
         return new float[]{config.getNeutralR(), config.getNeutralG(), config.getNeutralB(), config.getNeutralA()};
     }
 

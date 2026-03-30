@@ -1,8 +1,8 @@
-package dev.dokko.tellurium.config.screen.hitbox;
+package dev.dokko.tellurium.config.screen.hitbox.cond;
 
 import dev.dokko.tellurium.Tellurium;
 import dev.dokko.tellurium.config.Config;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 import net.uku3lig.ukulib.config.option.WidgetCreator;
 import net.uku3lig.ukulib.config.screen.AbstractConfigScreen;
 
@@ -10,7 +10,7 @@ import static dev.dokko.tellurium.config.screen.ConfigScreen.*;
 
 
 public class ConditionalHitboxesScreen extends AbstractConfigScreen<Config> {
-    protected ConditionalHitboxesScreen(Screen parent) {
+    public ConditionalHitboxesScreen(Screen parent) {
         super(Tellurium.MOD_ID+".hitboxes.conditional", parent, Tellurium.getManager());
     }
     @Override

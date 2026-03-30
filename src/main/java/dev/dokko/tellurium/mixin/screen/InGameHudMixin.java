@@ -1,19 +1,19 @@
 package dev.dokko.tellurium.mixin.screen;
 
 import dev.dokko.tellurium.Tellurium;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.ItemCooldownManager;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemCooldowns;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 
-@Mixin(InGameHud.class)
+@Mixin(Gui.class)
 public class InGameHudMixin {
     @Unique
     private static final int ICON_DISTANCE = 4;
@@ -33,99 +33,99 @@ public class InGameHudMixin {
     @Unique
     private static final ArrayList<Identifier> effects = new ArrayList<>();
     @Inject(method = "render", at = @At("TAIL"))
-    private void renderIndicators(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
+    private void renderIndicators(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
         effects.clear();
 
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
 
-        if (client.player == null || client.options.hudHidden) return;
+        if (client.player == null || client.options.hideGui) return;
 
-        int screenWidth = client.getWindow().getScaledWidth();
-        int screenHeight = client.getWindow().getScaledHeight();
+        int screenWidth = client.getWindow().getGuiScaledWidth();
+        int screenHeight = client.getWindow().getGuiScaledHeight();
 
-        ItemStack mainHand = client.player.getMainHandStack();
-        ItemStack offHand = client.player.getOffHandStack();
+        ItemStack mainHand = client.player.getMainHandItem();
+        ItemStack offHand = client.player.getOffhandItem();
 
-        renderIndicators(context, mainHand, client, offHand, screenWidth, screenHeight);
+        renderIndicators(guiGraphics, mainHand, client, offHand, screenWidth, screenHeight);
     }
 
     @Unique
-    private void renderIndicators(DrawContext context, ItemStack mainHand, MinecraftClient client, ItemStack offHand, int screenWidth, int screenHeight) {
+    private void renderIndicators(GuiGraphics guiGraphics, ItemStack mainHand, Minecraft client, ItemStack offHand, int screenWidth, int screenHeight) {
         if (Tellurium.getManager().getConfig().isLowHealthIndicator() && client.player.getHealth() <= 6){
-            Identifier iconTexture = Identifier.of(Tellurium.MOD_ID, "textures/icon/stat/low_health.png");
+            Identifier iconTexture = Identifier.fromNamespaceAndPath(Tellurium.MOD_ID, "textures/icon/stat/low_health.png");
             effects.add(iconTexture);
         }
         boolean holdingShield = false;
         boolean stunned = false;
-        ItemCooldownManager cooldownManager = client.player.getItemCooldownManager();
-        if(mainHand.isOf(Items.SHIELD)){
+        ItemCooldowns cooldownManager = client.player.getCooldowns();
+        if(mainHand.is(Items.SHIELD)){
             holdingShield = true;
-            stunned = cooldownManager.isCoolingDown(mainHand);
+            stunned = cooldownManager.isOnCooldown(mainHand);
         }
-        else if(offHand.isOf(Items.SHIELD)){
+        else if(offHand.is(Items.SHIELD)){
             holdingShield = true;
-            stunned = cooldownManager.isCoolingDown(offHand);
+            stunned = cooldownManager.isOnCooldown(offHand);
         }
         if(Tellurium.getManager().getConfig().isShieldStunIndicator() &&holdingShield && stunned) {
-            Identifier iconTexture = Identifier.of(Tellurium.MOD_ID, "textures/icon/stat/shield_stun.png");
+            Identifier iconTexture = Identifier.fromNamespaceAndPath(Tellurium.MOD_ID, "textures/icon/stat/shield_stun.png");
             effects.add(iconTexture);
         }
-        boolean hasStrength = client.player.hasStatusEffect(StatusEffects.STRENGTH);
-        boolean hasSpeed = client.player.hasStatusEffect(StatusEffects.SPEED);
+        boolean hasStrength = client.player.hasEffect(MobEffects.STRENGTH);
+        boolean hasSpeed = client.player.hasEffect(MobEffects.SPEED);
         boolean strengthRunningOut = false, speedRunningOut = false;
         if(hasStrength){
-            StatusEffectInstance strength = client.player.getStatusEffect(StatusEffects.STRENGTH);
-            strengthRunningOut = !strength.isInfinite() &&
+            MobEffectInstance strength = client.player.getEffect(MobEffects.STRENGTH);
+            strengthRunningOut = !strength.isInfiniteDuration() &&
                     strength.getDuration() <= 200;
         }
         if(hasSpeed){
-            StatusEffectInstance speed = client.player.getStatusEffect(StatusEffects.SPEED);
-            speedRunningOut = !speed.isInfinite() &&
+            MobEffectInstance speed = client.player.getEffect(MobEffects.SPEED);
+            speedRunningOut = !speed.isInfiniteDuration() &&
                     speed.getDuration() <= 200;
         }
         if (Tellurium.getManager().getConfig().isRepotIndicator()){
             if((hasStrength && strengthRunningOut) || (hasSpeed && speedRunningOut)){
-                Identifier iconTexture = Identifier.of(Tellurium.MOD_ID, "textures/icon/stat/repot.png");
+                Identifier iconTexture = Identifier.fromNamespaceAndPath(Tellurium.MOD_ID, "textures/icon/stat/repot.png");
                 effects.add(iconTexture);
             }
         }
-        if (Tellurium.getManager().getConfig().isTotemIndicator() && !offHand.isOf(Items.TOTEM_OF_UNDYING)
+        if (Tellurium.getManager().getConfig().isTotemIndicator() && !offHand.is(Items.TOTEM_OF_UNDYING)
                 && hasTotemInInventory(client.player)) {
-            Identifier iconTexture = Identifier.of("minecraft", "textures/item/totem_of_undying.png");
+            Identifier iconTexture = Identifier.fromNamespaceAndPath("minecraft", "textures/item/totem_of_undying.png");
             effects.add(iconTexture);
         }
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             if (slot.getType() == EquipmentSlot.Type.HUMANOID_ARMOR) {
-                ItemStack armor = client.player.getEquippedStack(slot);
+                ItemStack armor = client.player.getItemBySlot(slot);
 
-                if (armor.isDamageable() &&
-                        armor.getMaxDamage() - armor.getDamage() <= 50) {
+                if (armor.isDamageableItem() &&
+                        armor.getMaxDamage() - armor.getDamageValue() <= 50) {
 
-                    effects.add(Identifier.of(Tellurium.MOD_ID, "textures/icon/stat/low_armor.png"));
+                    effects.add(Identifier.fromNamespaceAndPath(Tellurium.MOD_ID, "textures/icon/stat/low_armor.png"));
                     break;
                 }
             }
         }
         if(Tellurium.getManager().getConfig().isBurningIndicator() && client.player.isOnFire()) {
-            Identifier iconTexture = Identifier.of(Tellurium.MOD_ID, "textures/icon/stat/burning.png");
+            Identifier iconTexture = Identifier.fromNamespaceAndPath(Tellurium.MOD_ID, "textures/icon/stat/burning.png");
             effects.add(iconTexture);
         }
-        boolean holdingMace = mainHand.isOf(Items.MACE);
-        boolean hasSlowFalling = client.player.hasStatusEffect(StatusEffects.SLOW_FALLING);
+        boolean holdingMace = mainHand.is(Items.MACE);
+        boolean hasSlowFalling = client.player.hasEffect(MobEffects.SLOW_FALLING);
         if (holdingMace && hasSlowFalling && Tellurium.getManager().getConfig().isMaceSlowFallIndicator()) {
-            Identifier iconTexture = Identifier.of(Tellurium.MOD_ID, "textures/icon/stat/mace_slowfall.png");
+            Identifier iconTexture = Identifier.fromNamespaceAndPath(Tellurium.MOD_ID, "textures/icon/stat/mace_slowfall.png");
             effects.add(iconTexture);
         }
-        if(Tellurium.getManager().getConfig().isElytraIndicator() && client.player.getEquippedStack(EquipmentSlot.CHEST).isOf(Items.ELYTRA)) {
-            Identifier iconTexture = Identifier.of("minecraft", "textures/item/elytra.png");
+        if(Tellurium.getManager().getConfig().isElytraIndicator() && client.player.getItemBySlot(EquipmentSlot.CHEST).is(Items.ELYTRA)) {
+            Identifier iconTexture = Identifier.fromNamespaceAndPath("minecraft", "textures/item/elytra.png");
             effects.add(iconTexture);
         }
 
-        renderEffects(context, screenWidth, screenHeight);
+        renderEffects(guiGraphics, screenWidth, screenHeight);
     }
 
     @Unique
-    private void renderEffects(DrawContext context, int screenWidth, int screenHeight) {
+    private void renderEffects(GuiGraphics guiGraphics, int screenWidth, int screenHeight) {
         int ICON_SIZE = Tellurium.getManager().getConfig().getIndicatorSize();
 
         int totalIcons = effects.size();
@@ -142,12 +142,12 @@ public class InGameHudMixin {
 
             int iconX = startX + col * (ICON_SIZE + ICON_DISTANCE);
             int iconY = screenHeight / 2 + Tellurium.getManager().getConfig().getIndicatorOffset() + row * (ICON_SIZE + ROW_DISTANCE);
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, iconTexture, iconX, iconY, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, iconTexture, iconX, iconY, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
         }
     }
     @Unique
-    private boolean hasTotemInInventory(PlayerEntity player) {
-        for (ItemStack stack : player.getInventory().getMainStacks()) {
+    private boolean hasTotemInInventory(Player player) {
+        for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
             if (stack.getItem() == Items.TOTEM_OF_UNDYING && !stack.isEmpty()) {
                 return true;
             }

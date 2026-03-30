@@ -11,7 +11,7 @@
     "entity.DebugHudProfileMixin",
     "entity.EntityRendererMixin",
     "entity.EntityRenderStateMixin",
-    "entity.PlayerEntityMixin",
+    "entity.PlayerMixin",
     "input.KeyboardMixin",
     "screen.ChatScreenMixin",
     "screen.InGameHudMixin",

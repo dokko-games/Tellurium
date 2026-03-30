@@ -1,25 +1,23 @@
 package dev.dokko.tellurium.config;
 
 import dev.dokko.tellurium.Tellurium;
-import net.minecraft.text.Text;
-import net.minecraft.util.TranslatableOption;
+import net.minecraft.network.chat.Component;
+import net.uku3lig.ukulib.config.option.StringTranslatable;
 
-public enum EnchantmentDisplay implements TranslatableOption {
-    DEFAULT("Normal", 0),
-    DECIMAL("Decimal", 1),
-    ROMAN("Roman", 2),
-    BOTH("Both", 3);
+public enum EnchantmentDisplay implements StringTranslatable {
+    DEFAULT("Normal"),
+    DECIMAL("Decimal"),
+    ROMAN("Roman"),
+    BOTH("Both");
     private final String id;
-    private final int iid;
 
-    EnchantmentDisplay(String id, int iid) {
+    EnchantmentDisplay(String id) {
         this.id = id;
-        this.iid = iid;
     }
 
     @Override
-    public int getId() {
-        return iid;
+    public String getName() {
+        return "id";
     }
 
     @Override
@@ -32,7 +30,7 @@ public enum EnchantmentDisplay implements TranslatableOption {
     }
 
     @Override
-    public Text getText() {
-        return TranslatableOption.super.getText();
+    public Component getText() {
+        return StringTranslatable.super.getText();
     }
 }

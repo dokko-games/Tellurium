@@ -33,9 +33,13 @@ public class Config implements Serializable {
     // Player
     private boolean removeDeathAnimation = false;
     private boolean perfectReachSound = true;
+
     // Hitboxes
+
     private boolean renderHitboxes;
+
     // Conditional Hitboxes
+
     private boolean crawlHitbox = false;
     private boolean elytraCrystalHitbox = true;
     private boolean speedHitbox = true;
@@ -45,9 +49,11 @@ public class Config implements Serializable {
     private boolean hideHitboxesForPassiveMobs = true;
     private boolean hideHitboxesForNeutralMobs = true;
     private boolean hideHitboxesForHostileMobs = false;
+
     // Customization
     private boolean disableEyeLine = true;
     private boolean disableLookVector = true;
+    private float hitboxThickness = 3;
     // Colors
     private float playerR = 1, playerG = 1, playerB = 1, playerA = 1;
     private float passiveR = .2f, passiveG = 1, passiveB = .2f, passiveA = 1;

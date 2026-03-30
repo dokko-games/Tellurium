@@ -2,7 +2,7 @@ package dev.dokko.tellurium.mixin.screen;
 
 import dev.dokko.tellurium.Tellurium;
 import dev.dokko.tellurium.config.EnchantmentDisplay;
-import net.minecraft.util.Language;
+import net.minecraft.locale.Language;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Language.class)
 public class LanguageMixin {
-    @Inject(method = "get", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getOrDefault(Ljava/lang/String;)Ljava/lang/String;", at = @At("HEAD"), cancellable = true)
     private void interceptEnchantmentLevelKey(String key, CallbackInfoReturnable<String> cir) {
         EnchantmentDisplay display = Tellurium.getManager().getConfig().getEnchantmentDisplay();
         if (display != EnchantmentDisplay.DEFAULT && key.startsWith("enchantment.level.")) {

@@ -1,6 +1,6 @@
 package dev.dokko.tellurium.util;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 public interface EntityRenderStateAccessor {
 

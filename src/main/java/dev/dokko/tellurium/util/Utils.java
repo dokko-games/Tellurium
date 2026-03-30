@@ -1,11 +1,12 @@
 package dev.dokko.tellurium.util;
 
-import net.minecraft.client.MinecraftClient;
+
+import net.minecraft.client.Minecraft;
 
 import java.io.File;
 public class Utils {
-    public static File getScreenshotsPath(MinecraftClient client){
-        return new File(client.getResourcePackDir().toFile().getParentFile().getPath()+"/screenshots");
+    public static File getScreenshotsPath(Minecraft client){
+        return new File(client.getResourcePackDirectory().toFile().getParentFile().getPath()+"/screenshots");
     }
 
     public static boolean delete(File f) {

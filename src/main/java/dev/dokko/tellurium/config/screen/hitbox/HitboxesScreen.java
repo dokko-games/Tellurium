@@ -2,7 +2,9 @@ package dev.dokko.tellurium.config.screen.hitbox;
 
 import dev.dokko.tellurium.Tellurium;
 import dev.dokko.tellurium.config.Config;
-import net.minecraft.client.gui.screen.Screen;
+import dev.dokko.tellurium.config.screen.hitbox.col.HitboxesColorScreen;
+import dev.dokko.tellurium.config.screen.hitbox.cond.ConditionalHitboxesScreen;
+import net.minecraft.client.gui.screens.Screen;
 import net.uku3lig.ukulib.config.option.ScreenOpenButton;
 import net.uku3lig.ukulib.config.option.WidgetCreator;
 import net.uku3lig.ukulib.config.screen.AbstractConfigScreen;

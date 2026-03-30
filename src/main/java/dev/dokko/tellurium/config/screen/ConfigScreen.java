@@ -5,10 +5,10 @@ import dev.dokko.tellurium.config.Config;
 import dev.dokko.tellurium.config.EnchantmentDisplay;
 import dev.dokko.tellurium.config.screen.hitbox.HitboxesScreen;
 import it.unimi.dsi.fastutil.floats.FloatConsumer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.tooltip.Tooltip;
-import net.minecraft.client.option.SimpleOption;
-import net.minecraft.text.Text;
+import net.minecraft.client.OptionInstance;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.uku3lig.ukulib.config.option.*;
 import net.uku3lig.ukulib.config.screen.AbstractConfigScreen;
 
@@ -37,8 +37,8 @@ public class ConfigScreen extends AbstractConfigScreen<Config> {
                 new ScreenOpenButton(Tellurium.MOD_ID+".hitboxes", HitboxesScreen::new),
         };
     }
-    public static <T> SimpleOption.TooltipFactory<T> makeTooltip(String key) {
-        return value -> Tooltip.of(Text.translatable(key));
+    public static <T> OptionInstance.TooltipSupplier<T> makeTooltip(String key) {
+        return value -> Tooltip.create(Component.translatable(key));
     }
     public static CyclingOption<Boolean> makeBoolean(String key, boolean init, Consumer<Boolean> setter){
         return CyclingOption.ofBoolean(Tellurium.MOD_ID+".feature."+key, init, setter, makeTooltip(Tellurium.MOD_ID+".feature."+key+".tooltip"));

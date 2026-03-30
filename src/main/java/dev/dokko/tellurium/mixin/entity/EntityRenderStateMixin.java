@@ -1,8 +1,8 @@
 package dev.dokko.tellurium.mixin.entity;
 
 import dev.dokko.tellurium.util.EntityRenderStateAccessor;
-import net.minecraft.client.render.entity.state.EntityRenderState;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(EntityRenderState.class)
