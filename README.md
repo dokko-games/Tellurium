@@ -53,7 +53,8 @@ Modify how hitboxes are rendered:
   * Eye boxes
   * Look vectors
  
-* Elytra + End Crystal hitbox support
+* F3 + B state stored between sessions
+* Custom thickness
 
 ---
 
