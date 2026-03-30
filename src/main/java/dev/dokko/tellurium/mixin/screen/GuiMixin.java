@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.ArrayList;
 
 @Mixin(Gui.class)
-public class InGameHudMixin {
+public class GuiMixin {
     @Unique
     private static final int ICON_DISTANCE = 4;
     @Unique

@@ -6,16 +6,16 @@
     "defaultRequire": 1
   },
   "client": [
-    "MinecraftClientMixin",
-    "entity.DebugHitboxCommandRendererMixin",
-    "entity.DebugHudProfileMixin",
+    "MinecraftMixin",
+    "entity.EntityHitboxDebugRendererMixin",
+    "entity.DebugScreenEntryListMixin",
     "entity.EntityRendererMixin",
     "entity.EntityRenderStateMixin",
     "entity.PlayerMixin",
-    "input.KeyboardMixin",
+    "input.KeyboardHandlerMixin",
     "screen.ChatScreenMixin",
-    "screen.InGameHudMixin",
-    "screen.KeybindingMixin",
+    "screen.GuiMixin",
+    "screen.KeyMappingMixin",
     "screen.LanguageMixin",
     "screen.OptionsScreenMixin"
   ]

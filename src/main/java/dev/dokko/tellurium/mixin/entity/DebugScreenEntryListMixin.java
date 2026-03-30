@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(DebugScreenEntryList.class)
-public class DebugHudProfileMixin {
+public class DebugScreenEntryListMixin {
 
     @Inject(
             method = "isCurrentlyEnabled",
@@ -17,9 +17,9 @@ public class DebugHudProfileMixin {
             cancellable = true
     )
     private void forceHitboxes(
-            Identifier entryId, CallbackInfoReturnable<Boolean> cir
+            Identifier location, CallbackInfoReturnable<Boolean> cir
     ) {
-        if (entryId == DebugScreenEntries.ENTITY_HITBOXES) {
+        if (location == DebugScreenEntries.ENTITY_HITBOXES) {
             cir.setReturnValue(true);
         }
     }

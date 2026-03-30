@@ -12,12 +12,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(KeyMapping.class)
-public abstract class KeybindingMixin {
+public abstract class KeyMappingMixin {
 
     @Shadow public abstract Component getTranslatedKeyMessage();
 
     @Inject(at = @At("HEAD"), method = "isDown", cancellable = true)
-    private void injectIsPressed(CallbackInfoReturnable<Boolean> ci){
+    private void injectIsDown(CallbackInfoReturnable<Boolean> ci){
         if(!Tellurium.getManager().getConfig().isGuiSneak())return;
         if(Minecraft.getInstance().screen == null)return;
         if(getTranslatedKeyMessage().equals(Minecraft.getInstance().options.keyShift.getTranslatedKeyMessage())){

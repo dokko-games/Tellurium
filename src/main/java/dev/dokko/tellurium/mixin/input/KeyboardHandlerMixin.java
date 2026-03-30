@@ -10,11 +10,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(KeyboardHandler.class)
-public class KeyboardMixin {
+public class KeyboardHandlerMixin {
 
     @Inject(method = "handleDebugKeys", at = @At("RETURN"))
-    private void onF3(KeyEvent keyEvent, CallbackInfoReturnable<Boolean> cir) {
-        if (keyEvent.key() == GLFW.GLFW_KEY_B) {
+    private void onF3(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
+        if (event.key() == GLFW.GLFW_KEY_B) {
             HitboxConfig.setRenderHitboxes(!HitboxConfig.isRenderHitboxes());
         }
     }

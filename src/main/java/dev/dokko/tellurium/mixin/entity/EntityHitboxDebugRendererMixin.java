@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.awt.*;
 
 @Mixin(EntityHitboxDebugRenderer.class)
-public abstract class DebugHitboxCommandRendererMixin {
+public abstract class EntityHitboxDebugRendererMixin {
 
     @Inject(method = "showHitboxes", at = @At("HEAD"), cancellable = true)
     private void onDrawHitbox(Entity entity, float tickProgress, boolean inLocalServer, CallbackInfo ci) {
