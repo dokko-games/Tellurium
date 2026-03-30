@@ -1,7 +1,7 @@
 package dev.dokko.tellurium.mixin.screen;
 
 import dev.dokko.tellurium.Tellurium;
-import dev.dokko.util.Utils;
+import dev.dokko.tellurium.util.Utils;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
 import net.minecraft.client.gui.tooltip.Tooltip;

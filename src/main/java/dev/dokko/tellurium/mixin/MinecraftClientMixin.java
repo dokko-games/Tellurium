@@ -8,7 +8,6 @@ import net.minecraft.client.gui.hud.debug.DebugHudEntries;
 import net.minecraft.client.gui.hud.debug.DebugHudEntryVisibility;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.GameOptions;
-import net.minecraft.client.render.entity.EntityRenderManager;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.Window;
 import org.spongepowered.asm.mixin.Final;

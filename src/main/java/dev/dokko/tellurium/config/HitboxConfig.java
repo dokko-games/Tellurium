@@ -1,19 +1,13 @@
 package dev.dokko.tellurium.config;
 
 import dev.dokko.tellurium.Tellurium;
-import net.minecraft.client.render.entity.state.EntityHitbox;
-import net.minecraft.client.render.entity.state.EntityRenderState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 
-import java.util.Map;
-import java.util.WeakHashMap;
 
 public class HitboxConfig {
-    public static final Map<EntityRenderState, Entity> STATE_TO_ENTITY = new WeakHashMap<>();
-    public static Map<Entity, EntityHitbox> currentHitbox = new WeakHashMap<>();
     // runtime toggle for custom hitboxes
     private static boolean renderHitboxes = false;
 
@@ -26,12 +20,10 @@ public class HitboxConfig {
         if (entity instanceof PassiveEntity && config.isHideHitboxesForPassiveMobs()) return false;
         if (entity instanceof HostileEntity && config.isHideHitboxesForHostileMobs()) return false;
         if (entity instanceof PlayerEntity && config.isHideHitboxesForPlayers()) return false;
-        if (!(entity instanceof PassiveEntity) &&
-                !(entity instanceof HostileEntity) &&
-                !(entity instanceof PlayerEntity) &&
-                config.isHideHitboxesForNeutralMobs()) return false;
-
-        return true;
+        return entity instanceof PassiveEntity ||
+                entity instanceof HostileEntity ||
+                entity instanceof PlayerEntity ||
+                !config.isHideHitboxesForNeutralMobs();
     }
 
     public static boolean isRenderHitboxes() {

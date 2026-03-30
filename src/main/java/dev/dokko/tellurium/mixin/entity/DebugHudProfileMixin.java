@@ -1,6 +1,5 @@
 package dev.dokko.tellurium.mixin.entity;
 
-import dev.dokko.tellurium.config.HitboxConfig;
 import net.minecraft.client.gui.hud.debug.DebugHudEntries;
 import net.minecraft.client.gui.hud.debug.DebugHudProfile;
 import net.minecraft.util.Identifier;
@@ -20,8 +19,7 @@ public class DebugHudProfileMixin {
     private void forceHitboxes(
             Identifier entryId, CallbackInfoReturnable<Boolean> cir
     ) {
-        if (entryId == DebugHudEntries.ENTITY_HITBOXES
-                && HitboxConfig.isRenderHitboxes()) {
+        if (entryId == DebugHudEntries.ENTITY_HITBOXES) {
             cir.setReturnValue(true);
         }
     }

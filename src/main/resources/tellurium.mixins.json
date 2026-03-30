@@ -7,8 +7,10 @@
   },
   "client": [
     "MinecraftClientMixin",
+    "entity.DebugHitboxCommandRendererMixin",
     "entity.DebugHudProfileMixin",
     "entity.EntityRendererMixin",
+    "entity.EntityRenderStateMixin",
     "entity.PlayerEntityMixin",
     "input.KeyboardMixin",
     "screen.ChatScreenMixin",

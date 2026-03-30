@@ -1,7 +1,6 @@
 package dev.dokko.tellurium.mixin.entity;
 
 import dev.dokko.tellurium.Tellurium;
-import dev.dokko.tellurium.config.HitboxConfig;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundCategory;

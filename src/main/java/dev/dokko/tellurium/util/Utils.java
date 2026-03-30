@@ -1,4 +1,4 @@
-package dev.dokko.util;
+package dev.dokko.tellurium.util;
 
 import net.minecraft.client.MinecraftClient;
 
