@@ -2,13 +2,13 @@ package dev.dokko.tellurium;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import dev.dokko.tellurium.config.Config;
+import dev.dokko.tellurium.config.ConfigManager;
 import lombok.Getter;
 import net.fabricmc.api.ClientModInitializer;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.uku3lig.ukulib.config.ConfigManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,16 +19,22 @@ public class Tellurium implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_NAME);
 
 	@Getter
-	private static final ConfigManager<Config> manager = ConfigManager.createDefault(Config.class, MOD_ID);
+	private static Config config;
+
+	public static void saveConfig() {
+		ConfigManager.save(config);
+	}
 
 	@Override
 	public void onInitializeClient() {
+		config = ConfigManager.load();
+
 		ClientTickEvents.END_CLIENT_TICK.register(this::runInvertSprint);
 
 		LOGGER.info("Loaded {}", MOD_NAME);
 	}
 	private void runInvertSprint(Minecraft client) {
-		if(!manager.getConfig().isInvertSprint())return;
+		if(!getConfig().isInvertSprint())return;
 		if (client.player == null || client.options == null) return;
 
 		KeyMapping sprintKey = client.options.keySprint;

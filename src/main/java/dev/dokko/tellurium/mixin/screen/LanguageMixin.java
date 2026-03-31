@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class LanguageMixin {
     @Inject(method = "getOrDefault(Ljava/lang/String;)Ljava/lang/String;", at = @At("HEAD"), cancellable = true)
     private void interceptEnchantmentLevelKey(String elementId, CallbackInfoReturnable<String> cir) {
-        EnchantmentDisplay display = Tellurium.getManager().getConfig().getEnchantmentDisplay();
+        EnchantmentDisplay display = Tellurium.getConfig().getEnchantmentDisplay();
         if (display != EnchantmentDisplay.DEFAULT && elementId.startsWith("enchantment.level.")) {
             String levelStr = elementId.substring("enchantment.level.".length());
 

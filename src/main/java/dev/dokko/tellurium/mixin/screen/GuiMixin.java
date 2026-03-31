@@ -51,7 +51,7 @@ public class GuiMixin {
 
     @Unique
     private void renderIndicators(GuiGraphicsExtractor guiGraphics, ItemStack mainHand, Minecraft client, ItemStack offHand, int screenWidth, int screenHeight) {
-        if (Tellurium.getManager().getConfig().isLowHealthIndicator() && client.player.getHealth() <= 6){
+        if (Tellurium.getConfig().isLowHealthIndicator() && client.player.getHealth() <= 6){
             Identifier iconTexture = Identifier.fromNamespaceAndPath(Tellurium.MOD_ID, "textures/icon/stat/low_health.png");
             effects.add(iconTexture);
         }
@@ -66,7 +66,7 @@ public class GuiMixin {
             holdingShield = true;
             stunned = cooldownManager.isOnCooldown(offHand);
         }
-        if(Tellurium.getManager().getConfig().isShieldStunIndicator() &&holdingShield && stunned) {
+        if(Tellurium.getConfig().isShieldStunIndicator() &&holdingShield && stunned) {
             Identifier iconTexture = Identifier.fromNamespaceAndPath(Tellurium.MOD_ID, "textures/icon/stat/shield_stun.png");
             effects.add(iconTexture);
         }
@@ -83,13 +83,13 @@ public class GuiMixin {
             speedRunningOut = !speed.isInfiniteDuration() &&
                     speed.getDuration() <= 200;
         }
-        if (Tellurium.getManager().getConfig().isRepotIndicator()){
+        if (Tellurium.getConfig().isRepotIndicator()){
             if((hasStrength && strengthRunningOut) || (hasSpeed && speedRunningOut)){
                 Identifier iconTexture = Identifier.fromNamespaceAndPath(Tellurium.MOD_ID, "textures/icon/stat/repot.png");
                 effects.add(iconTexture);
             }
         }
-        if (Tellurium.getManager().getConfig().isTotemIndicator() && !offHand.is(Items.TOTEM_OF_UNDYING)
+        if (Tellurium.getConfig().isTotemIndicator() && !offHand.is(Items.TOTEM_OF_UNDYING)
                 && hasTotemInInventory(client.player)) {
             Identifier iconTexture = Identifier.fromNamespaceAndPath("minecraft", "textures/item/totem_of_undying.png");
             effects.add(iconTexture);
@@ -106,17 +106,17 @@ public class GuiMixin {
                 }
             }
         }
-        if(Tellurium.getManager().getConfig().isBurningIndicator() && client.player.isOnFire()) {
+        if(Tellurium.getConfig().isBurningIndicator() && client.player.isOnFire()) {
             Identifier iconTexture = Identifier.fromNamespaceAndPath(Tellurium.MOD_ID, "textures/icon/stat/burning.png");
             effects.add(iconTexture);
         }
         boolean holdingMace = mainHand.is(Items.MACE);
         boolean hasSlowFalling = client.player.hasEffect(MobEffects.SLOW_FALLING);
-        if (holdingMace && hasSlowFalling && Tellurium.getManager().getConfig().isMaceSlowFallIndicator()) {
+        if (holdingMace && hasSlowFalling && Tellurium.getConfig().isMaceSlowFallIndicator()) {
             Identifier iconTexture = Identifier.fromNamespaceAndPath(Tellurium.MOD_ID, "textures/icon/stat/mace_slowfall.png");
             effects.add(iconTexture);
         }
-        if(Tellurium.getManager().getConfig().isElytraIndicator() && client.player.getItemBySlot(EquipmentSlot.CHEST).is(Items.ELYTRA)) {
+        if(Tellurium.getConfig().isElytraIndicator() && client.player.getItemBySlot(EquipmentSlot.CHEST).is(Items.ELYTRA)) {
             Identifier iconTexture = Identifier.fromNamespaceAndPath("minecraft", "textures/item/elytra.png");
             effects.add(iconTexture);
         }
@@ -126,7 +126,7 @@ public class GuiMixin {
 
     @Unique
     private void renderEffects(GuiGraphicsExtractor guiGraphics, int screenWidth, int screenHeight) {
-        int ICON_SIZE = Tellurium.getManager().getConfig().getIndicatorSize();
+        int ICON_SIZE = Tellurium.getConfig().getIndicatorSize();
 
         int totalIcons = effects.size();
 
@@ -141,7 +141,7 @@ public class GuiMixin {
             int startX = screenWidth / 2 - rowWidth / 2;
 
             int iconX = startX + col * (ICON_SIZE + ICON_DISTANCE);
-            int iconY = screenHeight / 2 + Tellurium.getManager().getConfig().getIndicatorOffset() + row * (ICON_SIZE + ROW_DISTANCE);
+            int iconY = screenHeight / 2 + Tellurium.getConfig().getIndicatorOffset() + row * (ICON_SIZE + ROW_DISTANCE);
             guiGraphics.blit(RenderPipelines.GUI_TEXTURED, iconTexture, iconX, iconY, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
         }
     }

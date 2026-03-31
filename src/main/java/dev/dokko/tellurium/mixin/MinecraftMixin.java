@@ -25,13 +25,13 @@ public abstract class MinecraftMixin {
 
     @Inject(method ="setScreen", at = @At("HEAD"))
     private void openScreen(Screen screen, CallbackInfo ci){
-        if (Tellurium.getManager().getConfig().isGuiSneak() && screen != null) {
+        if (Tellurium.getConfig().isGuiSneak() && screen != null) {
             Flags.GUI_SNEAK_FLAG_SNEAKING = InputConstants.isKeyDown(getWindow(), options.keyShift.getDefaultKey().getValue());
         }
     }
     @Inject(method = "run", at = @At("HEAD"))
     private void applyHitboxState(CallbackInfo ci) {
-        HitboxConfig.setRenderHitboxes(Tellurium.getManager().getConfig().isRenderHitboxes());
+        HitboxConfig.setRenderHitboxes(Tellurium.getConfig().isRenderHitboxes());
         Minecraft.getInstance()
                 .debugEntries
                 .setStatus(DebugScreenEntries.ENTITY_HITBOXES, HitboxConfig.isRenderHitboxes() ? DebugScreenEntryStatus.ALWAYS_ON : DebugScreenEntryStatus.NEVER);

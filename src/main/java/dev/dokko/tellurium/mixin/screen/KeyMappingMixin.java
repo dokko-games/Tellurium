@@ -18,7 +18,7 @@ public abstract class KeyMappingMixin {
 
     @Inject(at = @At("HEAD"), method = "isDown", cancellable = true)
     private void injectIsDown(CallbackInfoReturnable<Boolean> ci){
-        if(!Tellurium.getManager().getConfig().isGuiSneak())return;
+        if(!Tellurium.getConfig().isGuiSneak())return;
         if(Minecraft.getInstance().screen == null)return;
         if(getTranslatedKeyMessage().equals(Minecraft.getInstance().options.keyShift.getTranslatedKeyMessage())){
             if(Flags.GUI_SNEAK_FLAG_SNEAKING){

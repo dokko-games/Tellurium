@@ -23,7 +23,7 @@ public class PlayerMixin {
 
     @Unique
     private void perfectReachLogic(Entity target) {
-        if(!Tellurium.getManager().getConfig().isPerfectReachSound()) return;
+        if(!Tellurium.getConfig().isPerfectReachSound()) return;
         Player player = (Player)(Object)this;
         Level world = player.level();
 

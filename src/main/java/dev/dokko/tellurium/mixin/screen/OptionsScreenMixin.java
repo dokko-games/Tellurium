@@ -46,7 +46,7 @@ public class OptionsScreenMixin extends Screen {
         this.ssButton = this.addRenderableWidget(
                 new Button.Builder(Component.empty(), ignored -> Util.getPlatform().openFile(Utils.getScreenshotsPath(minecraft)))
                         .size(20, 20)
-                        .tooltip(Tooltip.create(Component.literal("Screenshots")))
+                        .tooltip(Tooltip.create(Component.translatable("tellurium.gui.screenshots")))
                         .build()
         );
     }

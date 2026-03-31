@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class EntityRendererMixin<T extends Entity> {
     @Inject(method = "shouldRender", at = @At("HEAD"), cancellable = true)
     public void injectShouldRender(T entity, Frustum culler, double camX, double camY, double camZ, CallbackInfoReturnable<Boolean> cir){
-        if(!entity.isAlive() && Tellurium.getManager().getConfig().isRemoveDeathAnimation())cir.setReturnValue(false);
+        if(!entity.isAlive() && Tellurium.getConfig().isRemoveDeathAnimation())cir.setReturnValue(false);
     }
 
     @Inject(method = "extractRenderState", at = @At("HEAD"))

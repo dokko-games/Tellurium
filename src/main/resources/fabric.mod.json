@@ -14,7 +14,7 @@
 		"client": [
 			"dev.dokko.tellurium.Tellurium"
 		],
-		"ukulib": [
+		"modmenu": [
 			"dev.dokko.tellurium.config.Implementation"
 		]
 	},
@@ -25,6 +25,7 @@
 		"fabricloader": ">=0.18.5",
 		"minecraft": "=26.1",
 		"fabric-api": "*",
-		"ukulib": ">=2.0.0"
+		"cloth-config": ">=26.1.154",
+		"modmenu": "*"
 	}
 }

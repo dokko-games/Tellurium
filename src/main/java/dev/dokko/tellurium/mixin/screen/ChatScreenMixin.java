@@ -26,14 +26,14 @@ public class ChatScreenMixin {
             )
     )
     private int hideChatBarBackground(Options instance, int defaultColor) {
-        return Tellurium.getManager().getConfig().getChatTextBoxOpacity() << 24;
+        return Tellurium.getConfig().getChatTextBoxOpacity() << 24;
     }
 
     // On chat open
     @Inject(method = "init", at = @At("TAIL"))
     private void onInit(CallbackInfo ci) {
         Flags.STORE_CHAT_RESET = false;
-        if(!Tellurium.getManager().getConfig().isStoreChatMessage())return;
+        if(!Tellurium.getConfig().isStoreChatMessage())return;
         if(Flags.STORE_CHAT_LAST_MESSAGE == null)return;
         input.setValue(Flags.STORE_CHAT_LAST_MESSAGE);
         input.setHighlightPos(0);

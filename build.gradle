@@ -26,7 +26,12 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	api "net.uku3lig:ukulib-fabric:${project.ukulib_version}"
+	implementation "com.electronwill.night-config:toml:3.6.6"
+
+	api("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
+	api "com.terraformersmc:modmenu:${project.modmenu_version}"
 
 }
 

@@ -40,10 +40,10 @@ public class Config implements Serializable {
 
     // Conditional Hitboxes
 
-    private boolean crawlHitbox = false;
-    private boolean elytraCrystalHitbox = true;
+    private boolean crawlHitbox = true;
+    private boolean elytraCrystalHitbox = false;
     private boolean speedHitbox = true;
-    private double speedHitboxThreshold = 1.4f;
+    private float speedHitboxThreshold = 1.4f;
 
     private boolean hideHitboxesForPlayers = false;
     private boolean hideHitboxesForPassiveMobs = true;

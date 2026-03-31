@@ -33,7 +33,7 @@ public abstract class EntityHitboxDebugRendererMixin {
         if (isServerEntity) {// they want to debug, let them
             return;
         }
-        Config config = Tellurium.getManager().getConfig();
+        Config config = Tellurium.getConfig();
         ci.cancel();
         Minecraft mc = Minecraft.getInstance();
 

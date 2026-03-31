@@ -17,7 +17,7 @@ public class HitboxConfig {
     public static boolean renderCustomHitbox(Entity entity) {
         if (!renderHitboxes) return false;
 
-        var config = Tellurium.getManager().getConfig();
+        var config = Tellurium.getConfig();
 
         if (entity instanceof AgeableMob && config.isHideHitboxesForPassiveMobs()) return false;
         if (entity instanceof Monster && config.isHideHitboxesForHostileMobs()) return false;
@@ -30,12 +30,12 @@ public class HitboxConfig {
 
     public static void setRenderHitboxes(boolean render) {
         renderHitboxes = render;
-        Tellurium.getManager().getConfig().setRenderHitboxes(render);
-        Tellurium.getManager().saveConfig();
+        Tellurium.getConfig().setRenderHitboxes(render);
+        Tellurium.saveConfig();
     }
 
     public static float[] getColor(Entity entity) {
-        var config = Tellurium.getManager().getConfig();
+        var config = Tellurium.getConfig();
         if (entity instanceof Player) return new float[]{config.getPlayerR(), config.getPlayerG(), config.getPlayerB(), config.getPlayerA()};
         if (entity instanceof Monster) return new float[]{config.getHostileR(), config.getHostileG(), config.getHostileB(), config.getHostileA()};
         if (entity instanceof AgeableMob) return new float[]{config.getPassiveR(), config.getPassiveG(), config.getPassiveB(), config.getPassiveA()};
