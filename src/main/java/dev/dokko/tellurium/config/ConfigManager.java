@@ -1,7 +1,6 @@
 package dev.dokko.tellurium.config;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
-import com.electronwill.nightconfig.toml.TomlFormat;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.nio.file.Path;
