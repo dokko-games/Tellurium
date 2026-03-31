@@ -6,15 +6,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ChatScreen;
-import net.minecraft.client.input.KeyEvent;
-import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ChatScreen.class)
 public class ChatScreenMixin {
@@ -37,10 +34,10 @@ public class ChatScreenMixin {
     private void onInit(CallbackInfo ci) {
         //
         Flags.STORE_CHAT_RESET = false;
-        Flags.GUI_SNEAK_FLAG_TYPED = false;
         if(!Tellurium.getManager().getConfig().isStoreChatMessage())return;
         if(Flags.STORE_CHAT_LAST_MESSAGE == null)return;
         input.setValue(Flags.STORE_CHAT_LAST_MESSAGE);
+        input.setHighlightPos(0);
     }
     @Inject(method = "handleChatInput", at = @At("HEAD"))
     public void injectSend(String msg, boolean addToRecent, CallbackInfo ci) {
@@ -53,13 +50,6 @@ public class ChatScreenMixin {
     private void onRemoved(CallbackInfo ci) {
         // Save the current input
         if(!Flags.STORE_CHAT_RESET) Flags.STORE_CHAT_LAST_MESSAGE = input.getValue();
-    }
-    @Inject(method = "keyPressed", at=@At("HEAD"))
-    private void keyPressed(KeyEvent event, CallbackInfoReturnable<Boolean> cir){
-        if(event.key() == GLFW.GLFW_KEY_BACKSPACE && !Flags.GUI_SNEAK_FLAG_TYPED && !Flags.STORE_CHAT_LAST_MESSAGE.isEmpty()){
-            this.input.setValue("");
-        }
-        Flags.GUI_SNEAK_FLAG_TYPED = true;
     }
     @Inject(method = "handleChatInput", at = @At("HEAD"), cancellable = true)
     private void onSendMessage(String msg, boolean addToRecent, CallbackInfo ci) {

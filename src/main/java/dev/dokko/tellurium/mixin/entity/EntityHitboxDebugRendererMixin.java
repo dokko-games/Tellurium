@@ -38,6 +38,9 @@ public abstract class EntityHitboxDebugRendererMixin {
         Minecraft mc = Minecraft.getInstance();
 
         float[] col = HitboxConfig.getColor(entity);
+        if(config.isRemoveDeathAnimation() && !entity.isAlive()) {
+            return;
+        }
         boolean render = true;
         // F3+B is off
         if(!HitboxConfig.isRenderHitboxes()){

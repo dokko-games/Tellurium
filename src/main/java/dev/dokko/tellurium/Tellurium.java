@@ -25,7 +25,6 @@ public class Tellurium implements ClientModInitializer {
 	public void onInitializeClient() {
 		ClientTickEvents.END_CLIENT_TICK.register(this::runInvertSprint);
 
-
 		LOGGER.info("Loaded {}", MOD_NAME);
 	}
 	private void runInvertSprint(Minecraft client) {
