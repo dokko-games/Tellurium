@@ -49,6 +49,7 @@ public class Config implements Serializable {
     private boolean hideHitboxesForPassiveMobs = true;
     private boolean hideHitboxesForNeutralMobs = true;
     private boolean hideHitboxesForHostileMobs = false;
+    private boolean hideHitboxesForItems = true;
 
     // Customization
     private boolean disableEyeLine = true;
@@ -59,5 +60,6 @@ public class Config implements Serializable {
     private float passiveR = .2f, passiveG = 1, passiveB = .2f, passiveA = 1;
     private float neutralR = 1f, neutralG = 1, neutralB = .2f, neutralA = 1;
     private float hostileR = 1f, hostileG = .2f, hostileB = .2f, hostileA = 1;
+    private float itemR = .2f, itemG = .2f, itemB = 1f, itemA = 1;
 
 }

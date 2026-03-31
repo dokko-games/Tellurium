@@ -24,13 +24,10 @@ public class Implementation implements ModMenuApi {
             ConfigBuilder builder = ConfigBuilder.create()
                     .setParentScreen(parent)
                     .setTitle(Component.translatable("tellurium.config.screen"));
-            builder.setSavingRunnable(() -> {
-                ConfigManager.save(config);
-            });
+            builder.setSavingRunnable(() -> ConfigManager.save(config));
             ConfigEntryBuilder entryBuilder = builder.entryBuilder();
             ConfigCategory general = builder.getOrCreateCategory(Component.translatable("tellurium.config.screen"));
             addGeneralEntries(general, entryBuilder, config);
-            // ADD A CYCLING OPTION OF THE ENCHANTMENTDISPLAY CLASS
             ConfigCategory indicators = builder.getOrCreateCategory(Component.translatable("tellurium.indicators"));
             addIndicatorEntries(indicators, entryBuilder, config);
             ConfigCategory conditionalHitboxes = builder.getOrCreateCategory(Component.translatable("tellurium.hitboxes.conditional"));
@@ -73,6 +70,13 @@ public class Implementation implements ModMenuApi {
                     config.setPlayerB(newVal[2]);
                 }));
         visualHitboxes.addEntry(makeFloatNT(entryBuilder, "hitbox.color.alpha", config.getPlayerA(), 1, 0, 1, config::setPlayerA));
+        visualHitboxes.addEntry(makeColorf(entryBuilder, "hitbox.color.item", config.getItemR(), config.getItemG(),
+                config.getItemB(), .2f, .2f, 1f, newVal -> {
+                    config.setItemR(newVal[0]);
+                    config.setItemG(newVal[1]);
+                    config.setItemB(newVal[2]);
+                }));
+        visualHitboxes.addEntry(makeFloatNT(entryBuilder, "hitbox.color.alpha", config.getItemA(), 1, 0, 1, config::setItemA));
     }
 
     private static void addConditionalEntries(ConfigCategory conditionalHitboxes, ConfigEntryBuilder entryBuilder, Config config) {
@@ -80,6 +84,7 @@ public class Implementation implements ModMenuApi {
         conditionalHitboxes.addEntry(makeNTBool(entryBuilder, "hideForNeutral", config.isHideHitboxesForNeutralMobs(), true, config::setHideHitboxesForNeutralMobs));
         conditionalHitboxes.addEntry(makeNTBool(entryBuilder, "hideForHostile", config.isHideHitboxesForHostileMobs(), false, config::setHideHitboxesForHostileMobs));
         conditionalHitboxes.addEntry(makeNTBool(entryBuilder, "hideForPlayers", config.isHideHitboxesForPlayers(), false, config::setHideHitboxesForPlayers));
+        conditionalHitboxes.addEntry(makeNTBool(entryBuilder, "hideForItems", config.isHideHitboxesForItems(), true, config::setHideHitboxesForItems));
         conditionalHitboxes.addEntry(makeBool(entryBuilder, "crawlHitbox", config.isCrawlHitbox(), true, config::setCrawlHitbox));
         conditionalHitboxes.addEntry(makeBool(entryBuilder, "elytraCrystalHitbox", config.isElytraCrystalHitbox(), false, config::setElytraCrystalHitbox));
         conditionalHitboxes.addEntry(makeBool(entryBuilder, "speedHitbox", config.isSpeedHitbox(), true, config::setSpeedHitbox));
@@ -181,7 +186,7 @@ public class Implementation implements ModMenuApi {
     ) {
         return entryBuilder.startEnumSelector(
                         Component.translatable("tellurium.feature." + key),
-                        (Class<T>) value.getDeclaringClass(),
+                        value.getDeclaringClass(),
                         value
                 )
                 .setDefaultValue(defaultValue)
