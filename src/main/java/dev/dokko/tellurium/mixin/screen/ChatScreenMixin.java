@@ -32,7 +32,6 @@ public class ChatScreenMixin {
     // On chat open
     @Inject(method = "init", at = @At("TAIL"))
     private void onInit(CallbackInfo ci) {
-        //
         Flags.STORE_CHAT_RESET = false;
         if(!Tellurium.getManager().getConfig().isStoreChatMessage())return;
         if(Flags.STORE_CHAT_LAST_MESSAGE == null)return;
