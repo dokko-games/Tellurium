@@ -55,6 +55,12 @@ public class GuiMixin {
             Identifier iconTexture = Identifier.fromNamespaceAndPath(Tellurium.MOD_ID, "textures/icon/stat/low_health.png");
             effects.add(iconTexture);
         }
+        if (Tellurium.getConfig().isLowHealth2Indicator() && client.player.getHealth() <= 13){
+            if(client.player.getHealth() > 6){
+                Identifier iconTexture = Identifier.fromNamespaceAndPath(Tellurium.MOD_ID, "textures/icon/stat/low_health_2.png");
+                effects.add(iconTexture);
+            }
+        }
         boolean holdingShield = false;
         boolean stunned = false;
         ItemCooldowns cooldownManager = client.player.getCooldowns();

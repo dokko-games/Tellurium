@@ -64,7 +64,7 @@ public class Implementation implements ModMenuApi {
                 }));
         visualHitboxes.addEntry(makeFloatNT(entryBuilder, "hitbox.color.alpha", config.getHostileA(), 1, 0, 1, config::setHostileA));
         visualHitboxes.addEntry(makeColorf(entryBuilder, "hitbox.color.player", config.getPlayerR(), config.getPlayerG(),
-                config.getPlayerB(), 1f, 1, .2f, newVal -> {
+                config.getPlayerB(), 1f, 1, 1f, newVal -> {
                     config.setPlayerR(newVal[0]);
                     config.setPlayerG(newVal[1]);
                     config.setPlayerB(newVal[2]);
@@ -98,6 +98,7 @@ public class Implementation implements ModMenuApi {
         indicators.addEntry(makeBool(entryBuilder, "indicators.maceSlowFall", config.isMaceSlowFallIndicator(), true, config::setMaceSlowFallIndicator));
         indicators.addEntry(makeBool(entryBuilder, "indicators.elytra", config.isElytraIndicator(), false, config::setElytraIndicator));
         indicators.addEntry(makeBool(entryBuilder, "indicators.lowHealth", config.isLowHealthIndicator(), true, config::setLowHealthIndicator));
+        indicators.addEntry(makeBool(entryBuilder, "indicators.lowHealth2", config.isLowHealth2Indicator(), false, config::setLowHealth2Indicator));
         indicators.addEntry(makeBool(entryBuilder, "indicators.burning", config.isBurningIndicator(), true, config::setBurningIndicator));
         indicators.addEntry(makeBool(entryBuilder, "indicators.repot", config.isRepotIndicator(), false, config::setRepotIndicator));
         indicators.addEntry(makeBool(entryBuilder, "indicators.lowDurability", config.isLowDurabilityIndicator(), true, config::setLowDurabilityIndicator));
@@ -159,7 +160,7 @@ public class Implementation implements ModMenuApi {
     }
     private static ColorEntry makeColor(ConfigEntryBuilder entryBuilder, String key, int r, int g, int b, int dr, int dg, int db, Consumer<Integer[]> setter) {
         return entryBuilder.startColorField(Component.translatable("tellurium.feature."+key), new Color(r, g, b).getRGB() & 0xFFFFFF)
-                .setDefaultValue(new Color(dr, dg, db).getRGB())
+                .setDefaultValue(new Color(dr, dg, db).getRGB()  & 0xFFFFFF)
                 .setTooltip(Component.translatable("tellurium.feature."+key+".tooltip"))
                 .setSaveConsumer(newVal -> {
                     Color c = new Color(newVal);
@@ -169,7 +170,7 @@ public class Implementation implements ModMenuApi {
     }
     private static ColorEntry makeColorf(ConfigEntryBuilder entryBuilder, String key, float r, float g, float b, float dr, float dg, float db, Consumer<Float[]> setter) {
         return entryBuilder.startColorField(Component.translatable("tellurium.feature."+key), new Color(r, g, b).getRGB() & 0xFFFFFF)
-                .setDefaultValue(new Color(dr, dg, db).getRGB())
+                .setDefaultValue(new Color(dr, dg, db).getRGB()  & 0xFFFFFF)
                 .setSaveConsumer(newVal -> {
                     Color c = new Color(newVal);
                     setter.accept(new Float[]{c.getRed()/255f, c.getGreen()/255f, c.getBlue()/255f});

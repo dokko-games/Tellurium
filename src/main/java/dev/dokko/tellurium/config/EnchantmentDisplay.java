@@ -1,8 +1,10 @@
 package dev.dokko.tellurium.config;
 
 import dev.dokko.tellurium.Tellurium;
+import lombok.Getter;
 import net.minecraft.network.chat.Component;
 
+@Getter
 public enum EnchantmentDisplay {
     DEFAULT("normal"),
     DECIMAL("decimal"),
@@ -13,10 +15,6 @@ public enum EnchantmentDisplay {
 
     EnchantmentDisplay(String id) {
         this.id = id;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getTranslationKey() {

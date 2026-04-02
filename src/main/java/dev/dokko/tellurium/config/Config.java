@@ -22,9 +22,11 @@ public class Config implements Serializable {
     // Indicators
     private int indicatorSize = 10;
     private int indicatorOffset = 15;
+
     private boolean shieldStunIndicator = true;
     private boolean maceSlowFallIndicator = true;
-    private boolean lowHealthIndicator = false;
+    private boolean lowHealthIndicator = true;
+    private boolean lowHealth2Indicator = false;
     private boolean burningIndicator = true;
     private boolean elytraIndicator = false;
     private boolean repotIndicator = false;

@@ -14,6 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragonPart;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -108,6 +109,9 @@ public abstract class EntityHitboxDebugRendererMixin {
     @Unique
     private static boolean shouldRender(Config config, Entity renderEntity) {
         boolean render = true;
+        if(renderEntity instanceof FireworkRocketEntity){
+            return false;
+        }
         boolean currentCheck = config.isSpeedHitbox() && Minecraft.getInstance().player.getDeltaMovement().length() > config.getSpeedHitboxThreshold();
         if(!currentCheck) {
             currentCheck = config.isCrawlHitbox() && (renderEntity.isCrouching() || renderEntity.isSwimming() ||
