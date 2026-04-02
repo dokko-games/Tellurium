@@ -3,7 +3,7 @@
 	"id": "tellurium",
 	"version": "${version}",
 	"name": "Tellurium",
-	"description": "QOL features for casual players and pvpers",
+	"description": "QOL features for casual players and PvPers",
 	"authors": [
 		"qDokko",
 		"majorDTJ"
@@ -23,7 +23,7 @@
 		"tellurium.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.18.5",
+		"fabricloader": ">=0.18.0",
 		"minecraft": "=26.1",
 		"fabric-api": "*"
 	},
