@@ -4,13 +4,13 @@
 
 ---
 
-### ✨ Features
+### Features
 
-#### 🧠 Smart Indicators
+#### Smart Indicators
 
 Stay aware of important situations with clean, minimal indicators:
 
-* **Low Health** alert (under 3 hearts)
+* **Low Health** alert
 * **Low Armor** durability warning
 * **Burning** indicator
 * **Elytra equipped** indicator
@@ -23,7 +23,7 @@ All indicators support **custom size and screen offset** for perfect positioning
 
 ---
 
-#### ⚔️ Combat & Feedback
+#### Combat & Feedback
 
 * **3-block hit sound** for accurate reach feedback
 * **Remove death animations** for clearer visuals
@@ -36,7 +36,7 @@ All indicators support **custom size and screen offset** for perfect positioning
 
 ---
 
-#### 📦 Hitbox Customization
+#### Hitbox Customization
 
 Modify how hitboxes are rendered:
 
@@ -47,32 +47,33 @@ Modify how hitboxes are rendered:
   * Neutral mobs
   * Hostile mobs
   * Players
+  * Items
  
 * Option to hide:
 
   * Eye boxes
   * Look vectors
  
-* F3 + B state stored between sessions
+* F3+B state stored between game sessions
 * Custom thickness
 
 ---
 
-#### 🎮 Controls & Movement
+#### Controls & Movement
 
 * **Inverted sprinting** option
 * **GUI sneaking** (stay sneaking while opening menus)
 
 ---
 
-#### 💬 UI & Quality of Life
+#### UI & Quality of Life
 
 * Adjustable **chat textbox opacity**
 * **Store chat messages** when closing chat
 
 ---
 
-#### 🎨 Full Customization
+#### Full Customization
 
 * Full **RGBA color control** (including opacity)
 * Adjustable indicator **size and position**
@@ -80,6 +81,6 @@ Modify how hitboxes are rendered:
 
 ---
 
-### ⚙️ Configuration
+### Configuration
 
-Access everything through the in-game **Tellurium Configuration** screen made with **Ukulib**
+Access everything through the in-game **Tellurium Configuration** screen (requires [Mod Menu](https://modrinth.com/mod/modmenu) + [Cloth Config API](https://modrinth.com/mod/cloth-config) or [Ukulib](https://modrinth.com/mod/ukulib) on versions older than 2.0.0)
