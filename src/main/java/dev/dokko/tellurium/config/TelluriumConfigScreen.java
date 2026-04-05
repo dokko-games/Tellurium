@@ -35,7 +35,7 @@ public class TelluriumConfigScreen {
     private static void addVisualEntries(ConfigCategory visualHitboxes, ConfigEntryBuilder entryBuilder, Config config) {
         visualHitboxes.addEntry(makeBool(entryBuilder, "hitbox.disable.eyeLine", config.isDisableEyeLine(), true, config::setDisableEyeLine));
         visualHitboxes.addEntry(makeBool(entryBuilder, "hitbox.disable.lookVector", config.isDisableLookVector(), true, config::setDisableLookVector));
-        visualHitboxes.addEntry(makeFloat(entryBuilder, "hitbox.thickness", config.getHitboxThickness(), 3, 0, 10, config::setHitboxThickness));
+        visualHitboxes.addEntry(makeFloat(entryBuilder, "hitbox.thickness", config.getHitboxThickness(), 2.5f, 0, 10, config::setHitboxThickness));
         visualHitboxes.addEntry(makeColorf(entryBuilder, "hitbox.color.passive", config.getPassiveR(), config.getPassiveG(),
                 config.getPassiveB(), .2f, 1, .2f, newVal -> {
                     config.setPassiveR(newVal[0]);

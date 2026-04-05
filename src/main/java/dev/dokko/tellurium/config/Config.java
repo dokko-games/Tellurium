@@ -56,7 +56,7 @@ public class Config implements Serializable {
     // Customization
     private boolean disableEyeLine = true;
     private boolean disableLookVector = true;
-    private float hitboxThickness = 3;
+    private float hitboxThickness = 2.5f;
     // Colors
     private float playerR = 1, playerG = 1, playerB = 1, playerA = 1;
     private float passiveR = .2f, passiveG = 1, passiveB = .2f, passiveA = 1;
