@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+//TODO: Upgrade to loom 1.16
 public class Tellurium implements ClientModInitializer {
 	public static final String MOD_NAME = "Tellurium";
 	public static final String MOD_ID = "tellurium";
