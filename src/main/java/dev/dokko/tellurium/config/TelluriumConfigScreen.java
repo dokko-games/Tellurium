@@ -86,8 +86,10 @@ public class TelluriumConfigScreen {
     }
 
     private static void addIndicatorEntries(ConfigCategory indicators, ConfigEntryBuilder entryBuilder, Config config) {
-        indicators.addEntry(makeInt(entryBuilder, "indicators.offset", config.getIndicatorOffset(), 15, -25, 25, config::setIndicatorOffset));
         indicators.addEntry(makeInt(entryBuilder, "indicators.size", config.getIndicatorSize(), 10, 2, 20, config::setIndicatorSize));
+        indicators.addEntry(makeInt(entryBuilder, "indicators.offset", config.getIndicatorOffset(), 15, -25, 25, config::setIndicatorOffset));
+        indicators.addEntry(makeInt(entryBuilder, "indicators.distance", config.getIndicatorDistance(), 4, 0, 10, config::setIndicatorDistance));
+        indicators.addEntry(makeInt(entryBuilder, "indicators.row", config.getMaxIndicatorsPerRow(), 5, 1, 10, config::setMaxIndicatorsPerRow));
         indicators.addEntry(makeBool(entryBuilder, "indicators.shieldStun", config.isShieldStunIndicator(), true, config::setShieldStunIndicator));
         indicators.addEntry(makeBool(entryBuilder, "indicators.maceSlowFall", config.isMaceSlowFallIndicator(), true, config::setMaceSlowFallIndicator));
         indicators.addEntry(makeBool(entryBuilder, "indicators.elytra", config.isElytraIndicator(), false, config::setElytraIndicator));

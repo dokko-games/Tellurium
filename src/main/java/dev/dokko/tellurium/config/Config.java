@@ -22,6 +22,8 @@ public class Config implements Serializable {
     // Indicators
     private int indicatorSize = 10;
     private int indicatorOffset = 15;
+    private int indicatorDistance = 4;
+    private int maxIndicatorsPerRow = 5;
 
     private boolean shieldStunIndicator = true;
     private boolean maceSlowFallIndicator = true;

@@ -1,6 +1,8 @@
 package dev.dokko.tellurium.mixin.screen;
 
 import dev.dokko.tellurium.Tellurium;
+import dev.dokko.tellurium.indicator.Indicator;
+import dev.dokko.tellurium.indicator.Indicators;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -21,17 +23,17 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Mixin(Gui.class)
 public class GuiMixin {
     @Unique
-    private static final int ICON_DISTANCE = 4;
-    @Unique
-    private static final int MAX_ICONS_PER_ROW = 5;
-    @Unique
     private static final int ROW_DISTANCE = 2;
     @Unique
-    private static final ArrayList<Identifier> effects = new ArrayList<>();
+    private static final Indicators effects = new Indicators();
+    @Unique
+    private static EquipmentSlot[] invertedSlots;
     @Inject(method = "extractRenderState", at = @At("TAIL"))
     private void renderIndicators(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker, CallbackInfo ci) {
         effects.clear();
@@ -51,6 +53,11 @@ public class GuiMixin {
 
     @Unique
     private void renderIndicators(GuiGraphicsExtractor guiGraphics, ItemStack mainHand, Minecraft client, ItemStack offHand, int screenWidth, int screenHeight) {
+        if(invertedSlots == null) {
+            List<EquipmentSlot> eq = new ArrayList<>(List.of(EquipmentSlot.values()));
+            Collections.reverse(eq);
+            invertedSlots = eq.toArray(new EquipmentSlot[0]);
+        }
         if (Tellurium.getConfig().isLowHealthIndicator() && client.player.getHealth() <= 6){
             Identifier iconTexture = Identifier.fromNamespaceAndPath(Tellurium.MOD_ID, "textures/icon/stat/low_health.png");
             effects.add(iconTexture);
@@ -100,14 +107,23 @@ public class GuiMixin {
             Identifier iconTexture = Identifier.fromNamespaceAndPath("minecraft", "textures/item/totem_of_undying.png");
             effects.add(iconTexture);
         }
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
-            if (slot.getType() == EquipmentSlot.Type.HUMANOID_ARMOR) {
-                ItemStack armor = client.player.getItemBySlot(slot);
+        if(Tellurium.getConfig().isLowDurabilityIndicator()){
+            Identifier overlay = Identifier.fromNamespaceAndPath(Tellurium.MOD_ID, "textures/icon/stat/low_armor.png");
 
-                if (armor.isDamageableItem() &&
-                        armor.getMaxDamage() - armor.getDamageValue() <= 50) {
-                    effects.add(Identifier.fromNamespaceAndPath(Tellurium.MOD_ID, "textures/icon/stat/low_armor.png"));
-                    break;
+            for (EquipmentSlot slot : invertedSlots) {
+                if (slot.getType() == EquipmentSlot.Type.HUMANOID_ARMOR) {
+                    ItemStack armor = client.player.getItemBySlot(slot);
+
+                    if (!armor.isEmpty() && armor.isDamageableItem() &&
+                            armor.getMaxDamage() - armor.getDamageValue() <= 50) {
+
+                        Identifier armorTexture = Identifier.fromNamespaceAndPath(
+                                "minecraft",
+                                "textures/item/" + armor.getItem().getDescriptionId().replace("item.minecraft.", "") + ".png"
+                        );
+
+                        effects.add(new Indicator(armorTexture, overlay));
+                    }
                 }
             }
         }
@@ -121,9 +137,14 @@ public class GuiMixin {
             Identifier iconTexture = Identifier.fromNamespaceAndPath(Tellurium.MOD_ID, "textures/icon/stat/mace_slowfall.png");
             effects.add(iconTexture);
         }
-        if(Tellurium.getConfig().isElytraIndicator() && client.player.getItemBySlot(EquipmentSlot.CHEST).is(Items.ELYTRA)) {
-            Identifier iconTexture = Identifier.fromNamespaceAndPath("minecraft", "textures/item/elytra.png");
-            effects.add(iconTexture);
+        ItemStack chest = client.player.getItemBySlot(EquipmentSlot.CHEST);
+        if(Tellurium.getConfig().isElytraIndicator() && chest.is(Items.ELYTRA)) {
+            boolean flag = (chest.isDamageableItem() &&
+                    chest.getMaxDamage() - chest.getDamageValue() <= 50);
+            if(!(Tellurium.getConfig().isLowDurabilityIndicator() && flag)){
+                Identifier iconTexture = Identifier.fromNamespaceAndPath("minecraft", "textures/item/elytra.png");
+                effects.add(iconTexture);
+            }
         }
 
         renderEffects(guiGraphics, screenWidth, screenHeight);
@@ -136,18 +157,28 @@ public class GuiMixin {
         int totalIcons = effects.size();
 
         for (int i = 0; i < totalIcons; i++) {
-            Identifier iconTexture = effects.get(i);
+            Indicator iconTexture = effects.get(i);
 
-            int row = i / MAX_ICONS_PER_ROW;
-            int col = i % MAX_ICONS_PER_ROW;
+            int row = i / Tellurium.getConfig().getMaxIndicatorsPerRow();
+            int col = i % Tellurium.getConfig().getMaxIndicatorsPerRow();
 
-            int iconsInThisRow = Math.min(MAX_ICONS_PER_ROW, totalIcons - row * MAX_ICONS_PER_ROW);
-            int rowWidth = iconsInThisRow * ICON_SIZE + (iconsInThisRow - 1) * ICON_DISTANCE;
+            int iconsInThisRow = Math.min(Tellurium.getConfig().getMaxIndicatorsPerRow(), totalIcons - row * Tellurium.getConfig().getMaxIndicatorsPerRow());
+            int rowWidth = iconsInThisRow * ICON_SIZE + (iconsInThisRow - 1) * Tellurium.getConfig().getIndicatorDistance();
             int startX = screenWidth / 2 - rowWidth / 2;
 
-            int iconX = startX + col * (ICON_SIZE + ICON_DISTANCE);
+            int iconX = startX + col * (ICON_SIZE + Tellurium.getConfig().getIndicatorDistance());
             int iconY = screenHeight / 2 + Tellurium.getConfig().getIndicatorOffset() + row * (ICON_SIZE + ROW_DISTANCE);
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, iconTexture, iconX, iconY, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
+                    iconTexture.baseTexture,
+                    iconX, iconY,
+                    0, 0,
+                    ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
+            if(iconTexture.overlayTexture != null)
+                guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
+                        iconTexture.overlayTexture,
+                        iconX, iconY,
+                        0, 0,
+                        ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
         }
     }
     @Unique
@@ -159,5 +190,6 @@ public class GuiMixin {
         }
         return false;
     }
+
 
 }
