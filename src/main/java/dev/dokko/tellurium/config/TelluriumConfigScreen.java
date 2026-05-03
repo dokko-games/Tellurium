@@ -106,6 +106,7 @@ public class TelluriumConfigScreen {
         general.addEntry(makeInt(entryBuilder, "chatTextBoxOpacity", config.getChatTextBoxOpacity(), 0x80, 0, 255, config::setChatTextBoxOpacity));
         general.addEntry(makeBool(entryBuilder, "removeDeathAnimations", config.isRemoveDeathAnimation(), false, config::setRemoveDeathAnimation));
         general.addEntry(makeBool(entryBuilder, "perfectReachSound", config.isPerfectReachSound(), false, config::setPerfectReachSound));
+        general.addEntry(makeFloat(entryBuilder, "reachSoundDistance", config.getReachSoundDistance(), 3, 0, 3, config::setReachSoundDistance));
         general.addEntry(makeEnum(
                 entryBuilder,
                 "enchantmentDisplay",

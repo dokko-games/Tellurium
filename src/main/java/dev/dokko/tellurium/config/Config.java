@@ -35,6 +35,7 @@ public class Config implements Serializable {
     // Player
     private boolean removeDeathAnimation = false;
     private boolean perfectReachSound = true;
+    private float reachSoundDistance = 3.0f;
 
     // Hitboxes
 

@@ -106,7 +106,6 @@ public class GuiMixin {
 
                 if (armor.isDamageableItem() &&
                         armor.getMaxDamage() - armor.getDamageValue() <= 50) {
-
                     effects.add(Identifier.fromNamespaceAndPath(Tellurium.MOD_ID, "textures/icon/stat/low_armor.png"));
                     break;
                 }

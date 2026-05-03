@@ -27,8 +27,8 @@ public class PlayerMixin {
         Player player = (Player)(Object)this;
         Level world = player.level();
 
-        // +.02 for calculation errors
-        float error = .12f;
+        // +.2 for calculation errors because I am too bad as a developer to code this correctly
+        float error = .2f;
 
         if (target == null) return;
 
@@ -42,9 +42,10 @@ public class PlayerMixin {
 
         Vec3 closestPoint = new Vec3(closestX, closestY, closestZ);
         double distance = eyePos.distanceTo(closestPoint);
+        float tdistance = Tellurium.getConfig().getReachSoundDistance();
 
         // Check ~3 blocks with tolerance
-        if (distance >= 3 - error && distance <= 3 + error) {
+        if (distance >= tdistance - error && distance <= tdistance + error) {
             world.playSound(
                     null,
                     player.getX(),
