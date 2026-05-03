@@ -45,7 +45,7 @@ public class PlayerMixin {
         float tdistance = Tellurium.getConfig().getReachSoundDistance();
 
         // Check ~3 blocks with tolerance
-        if (distance >= tdistance - error && distance <= tdistance + error) {
+        if (distance >= tdistance - error) {
             world.playSound(
                     null,
                     player.getX(),
